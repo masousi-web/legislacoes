@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Legislativo — Esquemas de Estudo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #09090B;
+  --bg2:       #0F0F12;
+  --bg3:       #141418;
+  --bg4:       #1A1A20;
+  --border:    #222228;
+  --border2:   #2C2C36;
+  --gold:      #C9A84C;
+  --gold-dim:  #2A2010;
+  --gold-glow: rgba(201,168,76,0.15);
+  --gold-soft: #E8C97A;
+  --red:       #D64545;
+  --red-dim:   #200A0A;
+  --blue:      #3B82F6;
+  --blue-dim:  #0D1A35;
+  --teal:      #2DD4BF;
+  --teal-dim:  #051F1C;
+  --purple:    #A855F7;
+  --purple-dim:#1A0A2E;
+  --green:     #22C55E;
+  --green-dim: #071A0F;
+  --txt:       #D4D4D8;
+  --txt2:      #71717A;
+  --txt3:      #3F3F46;
+  --white:     #FAFAFA;
+  --ff-disp:   'Syne', sans-serif;
+  --ff-body:   'Cormorant Garamond', serif;
+  --ff-mono:   'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--ff-body);
+  font-size: 18px;
+  line-height: 1.6;
+  min-height: 100vh;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .2s, height .2s, opacity .2s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform .12s ease, width .3s, height .3s;
+}
+body:hover .cursor { opacity: 1; }
+
+/* ── NOISE + GRID OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,.012) 60px, rgba(255,255,255,.012) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,.012) 60px, rgba(255,255,255,.012) 61px);
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,.07) 0%, transparent 70%);
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ── HEADER / NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(9,9,11,.85);
+  backdrop-filter: blur(16px);
+}
+.nav-logo {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo::before {
+  content: '§';
+  font-size: 18px;
+  font-family: var(--ff-body);
+}
+.nav-links {
+  display: flex; gap: 36px; list-style: none;
+}
+.nav-links a {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt2);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-badge {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--txt3);
+  letter-spacing: 0.1em;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 140px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute;
+  bottom: -40px; right: -20px;
+  font-family: var(--ff-disp);
+  font-size: clamp(120px, 18vw, 260px);
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201,168,76,.07);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hero-kicker {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 16px;
+  animation: fadeUp .8s ease both;
+}
+.hero-kicker::before {
+  content: '';
+  display: block; width: 40px; height: 1px;
+  background: var(--gold);
+}
+
+.hero h1 {
+  font-family: var(--ff-disp);
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  max-width: 820px;
+  margin-bottom: 32px;
+  animation: fadeUp .8s .1s ease both;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--gold);
+  -webkit-text-stroke: 0;
+}
+
+.hero-desc {
+  font-family: var(--ff-body);
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--txt2);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  animation: fadeUp .8s .2s ease both;
+  font-style: italic;
+}
+
+.hero-stats {
+  display: flex; gap: 48px; flex-wrap: wrap;
+  animation: fadeUp .8s .3s ease both;
+}
+.stat {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.stat-num {
+  font-family: var(--ff-disp);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-num span { color: var(--gold); }
+.stat-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--txt3);
+}
+
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 48px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  animation: fadeUp 1s .5s ease both;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 100px 48px;
+  position: relative;
+}
+.section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 56px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.section-header::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0;
+  width: 80px; height: 2px;
+  background: var(--gold);
+}
+.section-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--ff-disp);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.section-count {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--txt3);
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  transition: border-color .3s, transform .3s;
+  text-decoration: none;
+  display: block;
+  group: true;
+}
+.card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--gold));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s ease;
+}
+.card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, var(--card-glow, rgba(201,168,76,.06)), transparent);
+  opacity: 0;
+  transition: opacity .4s;
+}
+.card:hover { border-color: var(--card-accent, var(--gold)); transform: translateY(-3px); }
+.card:hover::before { transform: scaleX(1); }
+.card:hover::after  { opacity: 1; }
+
+.card-tag {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--card-accent, var(--gold));
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-tag::before {
+  content: '';
+  display: block; width: 20px; height: 1px;
+  background: var(--card-accent, var(--gold));
+}
+
+.card-num {
+  font-family: var(--ff-body);
+  font-size: 13px;
+  color: var(--txt3);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-family: var(--ff-disp);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+}
+
+.card-desc {
+  font-family: var(--ff-body);
+  font-size: 15.5px;
+  color: var(--txt2);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.card-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 28px;
+}
+.tag {
+  font-family: var(--ff-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--border2);
+  color: var(--txt3);
+  border-radius: 2px;
+}
+
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.card-status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--txt3);
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--card-accent, var(--gold));
+  animation: pulse 2s ease-in-out infinite;
+}
+.card-arrow {
+  font-size: 18px;
+  color: var(--txt3);
+  transition: color .3s, transform .3s;
+  font-family: var(--ff-mono);
+}
+.card:hover .card-arrow {
+  color: var(--card-accent, var(--gold));
+  transform: translateX(6px);
+}
+
+/* Card colors */
+.card-gold   { --card-accent: var(--gold);   --card-glow: rgba(201,168,76,.08); }
+.card-red    { --card-accent: var(--red);    --card-glow: rgba(214,69,69,.08); }
+.card-blue   { --card-accent: var(--blue);   --card-glow: rgba(59,130,246,.08); }
+.card-teal   { --card-accent: var(--teal);   --card-glow: rgba(45,212,191,.08); }
+.card-purple { --card-accent: var(--purple); --card-glow: rgba(168,85,247,.08); }
+.card-green  { --card-accent: var(--green);  --card-glow: rgba(34,197,94,.08); }
+
+/* ── FEATURED CARD (wider) ── */
+.card-featured {
+  grid-column: span 2;
+}
+@media (max-width: 800px) {
+  .card-featured { grid-column: span 1; }
+}
+
+/* ── COMING SOON CARD ── */
+.card-soon {
+  opacity: .45;
+  pointer-events: none;
+}
+.card-soon .card-tag { color: var(--txt3); }
+.card-soon .card-tag::before { background: var(--txt3); }
+.card-soon .card-footer { border-top-color: var(--border); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2) 30%, var(--border2) 70%, transparent);
+  margin: 0 48px;
+}
+
+/* ── CATEGORIES SECTION ── */
+.categories {
+  padding: 80px 48px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 48px;
+}
+.cat-item {
+  background: var(--bg2);
+  padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: background .2s;
+  cursor: none;
+}
+.cat-item:hover { background: var(--bg3); }
+.cat-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+.cat-name {
+  font-family: var(--ff-disp);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+}
+.cat-count {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--txt3);
+}
+
+/* ── SEARCH BAR ── */
+.search-wrap {
+  padding: 80px 48px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  gap: 32px;
+}
+.search-title {
+  font-family: var(--ff-disp);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+.search-title span { color: var(--gold); }
+.search-box {
+  width: 100%; max-width: 600px;
+  position: relative;
+}
+.search-box input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--white);
+  font-family: var(--ff-mono);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  padding: 18px 56px 18px 20px;
+  outline: none;
+  transition: border-color .3s;
+}
+.search-box input::placeholder { color: var(--txt3); }
+.search-box input:focus { border-color: var(--gold); }
+.search-icon {
+  position: absolute; right: 18px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--txt3);
+  font-family: var(--ff-mono);
+  font-size: 18px;
+  pointer-events: none;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 48px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.footer-logo {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.footer-info {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--txt3);
+}
+.footer-links {
+  display: flex; gap: 24px; list-style: none;
+}
+.footer-links a {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--gold); }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 200;
+  height: 2px;
+  background: var(--gold);
+  width: 0%;
+  transition: width .1s linear;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .6; transform: scale(1.4); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 120px 24px 60px; }
+  .section { padding: 72px 24px; }
+  .categories { padding: 60px 24px; }
+  .search-wrap { padding: 60px 24px; }
+  footer { padding: 32px 24px; }
+  .divider { margin: 0 24px; }
+  .cards-grid { gap: 1px; }
+  .card { padding: 28px 24px; }
+}
+
+/* ── TOOLTIP ── */
+.tooltip-tag {
+  position: relative;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Codex Legislativo</div>
+  <ul class="nav-links">
+    <li><a href="#legislacoes">Legislações</a></li>
+    <li><a href="#categorias">Categorias</a></li>
+    <li><a href="#buscar">Buscar</a></li>
+  </ul>
+  <div class="nav-badge">v 1.0 · 2026</div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">LEX</div>
+    <div class="hero-kicker">Base de esquemas legislativos</div>
+    <h1>O direito<br>em <em>esquemas</em><br>claros.</h1>
+    <p class="hero-desc">Legislações essenciais sistematizadas com foco em concursos públicos — artigos, jurisprudência e pontos críticos em um único lugar.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">4<span>+</span></div>
+        <div class="stat-label">Legislações</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">—</div>
+        <div class="stat-label">Artigos Mapeados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">STF</div>
+        <div class="stat-label">Jurisprudência</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">CF<span>/88</span></div>
+        <div class="stat-label">Referência</div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>explorar</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categorias">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-label">Áreas do Direito</div>
+        <div class="section-title">Categorias</div>
+      </div>
+    </div>
+    <div class="categories-grid reveal">
+      <div class="cat-item">
+        <div class="cat-icon">⚖️</div>
+        <div class="cat-name">Direito Constitucional</div>
+        <div class="cat-count">2 esquemas</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-icon">🏛️</div>
+        <div class="cat-name">Direito Administrativo</div>
+        <div class="cat-count">1 esquema</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-icon">📜</div>
+        <div class="cat-name">Técnica Legislativa</div>
+        <div class="cat-count">1 esquema</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-icon">🔒</div>
+        <div class="cat-name">Penal / Responsabilidade</div>
+        <div class="cat-count">2 esquemas</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-icon">📋</div>
+        <div class="cat-name">Processo</div>
+        <div class="cat-count">1 esquema</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-icon">🔍</div>
+        <div class="cat-name">Controle e Fiscalização</div>
+        <div class="cat-count">em breve</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CARDS -->
+  <section class="section" id="legislacoes">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-label">Legislações disponíveis</div>
+        <div class="section-title">Esquemas de Estudo</div>
+      </div>
+      <div class="section-count">4 legislações · atualizado 2026</div>
+    </div>
+
+    <div class="cards-grid">
+
+      <!-- CARD 1 — Lei 1.079/50 FEATURED -->
+      <a href="lei1079_estudo.html" class="card card-gold card-featured reveal">
+        <div class="card-tag">Destaque</div>
+        <div class="card-num">Lei nº 1.079, de 10 de abril de 1950</div>
+        <div class="card-title">Crimes de Responsabilidade & Impeachment</div>
+        <div class="card-desc">Define os crimes de responsabilidade do Presidente da República, Ministros de Estado e altas autoridades. Regula o processo de julgamento com análise completa da recepção pela CF/88 e principais julgados do STF.</div>
+        <div class="card-tags">
+          <span class="tag">Impeachment</span>
+          <span class="tag">Câmara dos Deputados</span>
+          <span class="tag">Senado Federal</span>
+          <span class="tag">STF</span>
+          <span class="tag">ADPF 378</span>
+          <span class="tag">CF/88</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot"></div>
+            <span>Disponível</span>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </a>
+
+      <!-- CARD 2 — LC 95 -->
+      <a href="#" class="card card-blue reveal">
+        <div class="card-tag">Técnica Legislativa</div>
+        <div class="card-num">Lei Complementar nº 95, de 26 de fevereiro de 1998</div>
+        <div class="card-title">Elaboração, Redação e Consolidação das Leis</div>
+        <div class="card-desc">Dispõe sobre a elaboração, a redação, a alteração e a consolidação das leis. Estrutura dos atos normativos, artigos, incisos, alíneas e o processo de revogação.</div>
+        <div class="card-tags">
+          <span class="tag">Legiística</span>
+          <span class="tag">Normas Jurídicas</span>
+          <span class="tag">Decreto 4.176</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot"></div>
+            <span>Disponível</span>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </a>
+
+      <!-- CARD 3 — Abuso de Autoridade -->
+      <a href="#" class="card card-red reveal">
+        <div class="card-tag">Penal · Responsabilidade</div>
+        <div class="card-num">Lei nº 13.869, de 5 de setembro de 2019</div>
+        <div class="card-title">Lei de Abuso de Autoridade</div>
+        <div class="card-desc">Define os crimes de abuso de autoridade cometidos por agente público. Abrange condutas dos três poderes, responsabilidade penal e cível, e os tipos penais específicos com dolo específico.</div>
+        <div class="card-tags">
+          <span class="tag">Agente Público</span>
+          <span class="tag">Dolo Específico</span>
+          <span class="tag">Tipos Penais</span>
+          <span class="tag">Responsabilidade</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot"></div>
+            <span>Disponível</span>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </a>
+
+      <!-- CARD 4 — Processo Administrativo -->
+      <a href="#" class="card card-teal reveal">
+        <div class="card-tag">Processo · Administrativo</div>
+        <div class="card-num">Lei nº 9.784, de 29 de janeiro de 1999</div>
+        <div class="card-title">Processo Administrativo Federal</div>
+        <div class="card-desc">Regula o processo administrativo no âmbito da Administração Pública Federal direta e indireta. Princípios, prazos, direito de defesa, recursos e decisões administrativas.</div>
+        <div class="card-tags">
+          <span class="tag">PAF</span>
+          <span class="tag">Administração Federal</span>
+          <span class="tag">Contraditório</span>
+          <span class="tag">Ampla Defesa</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot"></div>
+            <span>Disponível</span>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </a>
+
+      <!-- CARD 5 — Em breve -->
+      <div class="card card-soon card-purple reveal">
+        <div class="card-tag">Em Breve</div>
+        <div class="card-num">Lei nº 8.429, de 2 de junho de 1992</div>
+        <div class="card-title">Lei de Improbidade Administrativa</div>
+        <div class="card-desc">Dispõe sobre as sanções aplicáveis em virtude da prática de atos de improbidade administrativa. Enriquecimento ilícito, lesão ao erário e violação dos princípios administrativos.</div>
+        <div class="card-tags">
+          <span class="tag">Improbidade</span>
+          <span class="tag">Sanções</span>
+          <span class="tag">Erário</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot" style="background:var(--txt3);animation:none"></div>
+            <span>Em Construção</span>
+          </div>
+          <div class="card-arrow">—</div>
+        </div>
+      </div>
+
+      <!-- CARD 6 — Em breve -->
+      <div class="card card-soon card-green reveal">
+        <div class="card-tag">Em Breve</div>
+        <div class="card-num">Lei nº 8.112, de 11 de dezembro de 1990</div>
+        <div class="card-title">Regime Jurídico dos Servidores Públicos Federais</div>
+        <div class="card-desc">Institui o regime jurídico dos servidores públicos civis da União, das autarquias e das fundações públicas federais. Direitos, deveres, regime disciplinar e processo administrativo disciplinar.</div>
+        <div class="card-tags">
+          <span class="tag">Servidor Público</span>
+          <span class="tag">PAD</span>
+          <span class="tag">RJU</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-status">
+            <div class="status-dot" style="background:var(--txt3);animation:none"></div>
+            <span>Em Construção</span>
+          </div>
+          <div class="card-arrow">—</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SEARCH -->
+  <section class="search-wrap" id="buscar">
+    <div class="section-label" style="font-family:var(--ff-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);">Encontre rapidamente</div>
+    <h2 class="search-title">Buscar <span>legislação</span></h2>
+    <div class="search-box reveal">
+      <input type="text" placeholder="Ex: impeachment, abuso, prazo..." id="searchInput">
+      <div class="search-icon">⌕</div>
+    </div>
+    <div id="searchResults" style="font-family:var(--ff-mono);font-size:12px;color:var(--txt3);letter-spacing:.1em;min-height:20px;"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">§ Codex Legislativo</div>
+    <ul class="footer-links">
+      <li><a href="#">Início</a></li>
+      <li><a href="#legislacoes">Legislações</a></li>
+      <li><a href="#categorias">Categorias</a></li>
+    </ul>
+    <div class="footer-info">Concursos Públicos · 2026 · Material de Estudo</div>
+  </footer>
+
+</div>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+(function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a, .card, .cat-item, input').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width  = '16px';
+    cursor.style.height = '16px';
+    ring.style.width  = '52px';
+    ring.style.height = '52px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width  = '10px';
+    cursor.style.height = '10px';
+    ring.style.width  = '36px';
+    ring.style.height = '36px';
+  });
+});
+
+// ── PROGRESS BAR ──
+const progressBar = document.getElementById('progress');
+document.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  progressBar.style.width = (p * 100) + '%';
+});
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.style.transitionDelay = (i % 4) * 0.08 + 's';
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => obs.observe(el));
+
+// ── SEARCH ──
+const searchData = [
+  { title: 'Lei 1.079/50 — Crimes de Responsabilidade',    tags: ['impeachment','presidente','ministro','senado','câmara','crime','responsabilidade','stf','adpf'],   href: 'lei1079_estudo.html' },
+  { title: 'LC 95/98 — Elaboração das Leis',               tags: ['lei complementar','redação','legiística','artigo','inciso','alínea','revogação','norma'],           href: '#' },
+  { title: 'Lei 13.869/19 — Abuso de Autoridade',          tags: ['abuso','autoridade','agente público','dolo','penal','sanção','policia','servidor'],                  href: '#' },
+  { title: 'Lei 9.784/99 — Processo Administrativo',       tags: ['processo','administrativo','paf','prazo','recurso','defesa','contraditório','federal'],             href: '#' },
+  { title: 'Lei 8.429/92 — Improbidade Administrativa',    tags: ['improbidade','erário','enriquecimento','sanção','ato','administração'],                              href: '#' },
+  { title: 'Lei 8.112/90 — Regime Jurídico dos Servidores',tags: ['servidor','público','rju','pad','disciplinar','cargo','direitos','deveres'],                         href: '#' },
+];
+const searchInput   = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.toLowerCase().trim();
+  if (!q) { searchResults.innerHTML = ''; return; }
+  const found = searchData.filter(d =>
+    d.title.toLowerCase().includes(q) ||
+    d.tags.some(t => t.includes(q))
+  );
+  if (found.length === 0) {
+    searchResults.innerHTML = '<span style="color:var(--txt3)">Nenhum resultado encontrado.</span>';
+  } else {
+    searchResults.innerHTML = found.map(d =>
+      `<div style="margin:8px 0;display:flex;align-items:center;gap:12px;">
+        <span style="color:var(--gold)">→</span>
+        <a href="${d.href}" style="color:var(--txt);text-decoration:none;font-size:12px;letter-spacing:.06em;transition:color .2s"
+           onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--txt)'">${d.title}</a>
+      </div>`
+    ).join('');
+  }
+});
+</script>
+</body>
+</html>
