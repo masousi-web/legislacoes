@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lei 1.079/50 — Codex Legislativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:         #09090B;
+  --bg2:        #0F0F12;
+  --bg3:        #141418;
+  --bg4:        #1A1A20;
+  --border:     #222228;
+  --border2:    #2C2C36;
+  --gold:       #C9A84C;
+  --gold-dim:   #2A2010;
+  --gold-soft:  #E8C97A;
+  --gold-glow:  rgba(201,168,76,0.12);
+  --red:        #D64545;
+  --red-dim:    #200A0A;
+  --blue:       #3B82F6;
+  --blue-dim:   #0D1A35;
+  --teal:       #2DD4BF;
+  --teal-dim:   #051F1C;
+  --purple:     #A855F7;
+  --purple-dim: #1A0A2E;
+  --green:      #22C55E;
+  --green-dim:  #071A0F;
+  --amber:      #F59E0B;
+  --amber-dim:  #271A00;
+  --txt:        #D4D4D8;
+  --txt2:       #71717A;
+  --txt3:       #3F3F46;
+  --white:      #FAFAFA;
+  --ff-disp:    'Syne', sans-serif;
+  --ff-body:    'Cormorant Garamond', serif;
+  --ff-mono:    'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--ff-body);
+  font-size: 18px;
+  line-height: 1.7;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+.cursor {
+  position: fixed; width: 10px; height: 10px;
+  background: var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,.45); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s;
+}
+
+/* ── OVERLAYS ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,.011) 60px, rgba(255,255,255,.011) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,.011) 60px, rgba(255,255,255,.011) 61px);
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 40% at 50% -5%, rgba(201,168,76,.06), transparent 65%);
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ── PROGRESS ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 300;
+  height: 2px; background: var(--gold); width: 0%;
+  transition: width .1s linear;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(9,9,11,.88);
+  backdrop-filter: blur(20px);
+}
+.nav-back {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--txt2);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  transition: color .2s;
+}
+.nav-back:hover { color: var(--gold); }
+.nav-back::before { content: '←'; font-size: 14px; }
+.nav-logo {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo::before { content: '§'; font-size: 18px; font-family: var(--ff-body); }
+.nav-toc {
+  display: flex; gap: 28px; list-style: none;
+}
+.nav-toc a {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-toc a:hover { color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 92vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 140px 48px 80px;
+  gap: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-watermark {
+  position: absolute;
+  right: -60px; bottom: -80px;
+  font-family: var(--ff-disp);
+  font-size: clamp(160px,22vw,320px);
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201,168,76,.055);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  user-select: none; pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero-left { animation: fadeUp .8s ease both; }
+
+.hero-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.hero-eyebrow::before {
+  content: ''; display: block;
+  width: 36px; height: 1px; background: var(--gold);
+}
+
+.hero h1 {
+  font-family: var(--ff-disp);
+  font-size: clamp(44px, 5.5vw, 78px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+.hero h1 .accent { color: var(--gold); }
+
+.hero-subtitle {
+  font-family: var(--ff-body);
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--txt2);
+  margin-bottom: 36px;
+  line-height: 1.6;
+  max-width: 440px;
+}
+
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.meta-chip {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--border2);
+  color: var(--txt2);
+  border-radius: 2px;
+  transition: border-color .2s, color .2s;
+}
+.meta-chip:hover { border-color: var(--gold); color: var(--gold); }
+.meta-chip.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+/* ── HERO RIGHT: TOC card ── */
+.hero-right {
+  animation: fadeUp .8s .15s ease both;
+}
+.toc-card {
+  border: 1px solid var(--border2);
+  border-top: 2px solid var(--gold);
+  background: var(--bg2);
+  padding: 32px;
+  position: relative;
+}
+.toc-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--gold-glow), transparent);
+  pointer-events: none;
+}
+.toc-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.toc-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.toc-item a {
+  display: flex; align-items: center; gap: 14px;
+  padding: 11px 14px;
+  text-decoration: none;
+  font-family: var(--ff-body);
+  font-size: 16px;
+  color: var(--txt2);
+  border-left: 2px solid transparent;
+  transition: color .2s, border-color .2s, background .2s, padding .2s;
+}
+.toc-item a:hover {
+  color: var(--white);
+  border-left-color: var(--gold);
+  background: rgba(201,168,76,.06);
+  padding-left: 20px;
+}
+.toc-num {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--txt3);
+  min-width: 28px;
+}
+.toc-badge {
+  margin-left: auto;
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.badge-gold   { background: var(--gold-dim);   color: var(--gold); }
+.badge-red    { background: var(--red-dim);    color: var(--red); }
+.badge-blue   { background: var(--blue-dim);   color: var(--blue); }
+.badge-teal   { background: var(--teal-dim);   color: var(--teal); }
+.badge-purple { background: var(--purple-dim); color: var(--purple); }
+
+/* ── MAIN LAYOUT ── */
+.main {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 48px 120px;
+  gap: 0;
+  position: relative;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: sticky; top: 72px;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+  padding: 48px 24px 48px 0;
+  border-right: 1px solid var(--border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.sidebar-section { margin-bottom: 36px; }
+.sidebar-title {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-bottom: 12px;
+  padding-left: 12px;
+}
+.sidebar-links { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+.sidebar-links a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  font-family: var(--ff-body);
+  font-size: 15px;
+  color: var(--txt3);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color .2s, border-color .2s, background .2s;
+  border-radius: 0 2px 2px 0;
+}
+.sidebar-links a:hover { color: var(--txt); background: var(--bg3); }
+.sidebar-links a.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
+.sidebar-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: currentColor; opacity: .5; flex-shrink: 0;
+}
+
+/* ── CONTENT AREA ── */
+.content { padding: 48px 0 48px 56px; }
+
+/* ── CHAPTER HEADER ── */
+.chapter {
+  margin-bottom: 72px;
+  scroll-margin-top: 90px;
+}
+.chapter-head {
+  display: flex; align-items: flex-start; gap: 24px;
+  margin-bottom: 36px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.chapter-head::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0;
+  height: 2px; width: 60px;
+  background: var(--chapter-color, var(--gold));
+}
+.chapter-num-block {
+  flex-shrink: 0;
+  width: 52px; height: 52px;
+  border: 1px solid var(--chapter-color, var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.3);
+}
+.chapter-num-block span {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chapter-color, var(--gold));
+  letter-spacing: 0.06em;
+}
+.chapter-title-wrap {}
+.chapter-eyebrow {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-bottom: 6px;
+}
+.chapter-title {
+  font-family: var(--ff-disp);
+  font-size: clamp(22px, 2.8vw, 32px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* ── ART BLOCK ── */
+.art-block {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  border: 1px solid var(--border);
+  margin: 16px 0;
+  overflow: hidden;
+  background: var(--bg2);
+  transition: border-color .25s;
+}
+.art-block:hover { border-color: var(--border2); }
+.art-id {
+  background: var(--bg3);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border-right: 1px solid var(--border);
+  padding: 16px 8px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--txt3);
+  text-align: center;
+  line-height: 1.5;
+  gap: 4px;
+}
+.art-id strong { color: var(--gold); font-size: 14px; letter-spacing: 0; font-weight: 500; }
+.art-text {
+  padding: 16px 20px;
+  font-family: var(--ff-body);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--txt);
+  line-height: 1.7;
+}
+.art-text b { font-style: normal; color: var(--gold-soft); font-weight: 600; }
+.art-text .rev { color: var(--txt3); text-decoration: line-through; font-style: normal; }
+
+/* ── CALLOUT ── */
+.callout {
+  border-left: 3px solid;
+  padding: 16px 20px;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+.callout::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: currentColor; opacity: .04;
+}
+.callout-head {
+  font-family: var(--ff-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.callout p {
+  font-family: var(--ff-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--txt);
+}
+.callout p strong { font-weight: 600; }
+.c-gold   { border-color: var(--gold);   color: var(--gold);   background: var(--gold-dim); }
+.c-red    { border-color: var(--red);    color: var(--red);    background: var(--red-dim); }
+.c-blue   { border-color: var(--blue);   color: var(--blue);   background: var(--blue-dim); }
+.c-teal   { border-color: var(--teal);   color: var(--teal);   background: var(--teal-dim); }
+.c-purple { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
+.c-green  { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+.c-amber  { border-color: var(--amber);  color: var(--amber);  background: var(--amber-dim); }
+
+/* ── STF BOX ── */
+.stf-box {
+  border: 1px solid rgba(201,168,76,.3);
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(135deg, #191200, #0d0c05);
+  padding: 20px 22px;
+  margin: 20px 0;
+  position: relative;
+}
+.stf-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+}
+.stf-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.stf-case {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+}
+.stf-divider { flex: 1; height: 1px; background: rgba(201,168,76,.15); }
+.stf-box p {
+  font-family: var(--ff-body);
+  font-size: 15.5px;
+  font-style: italic;
+  color: #C5B06A;
+  line-height: 1.65;
+}
+.stf-box p + p { margin-top: 10px; }
+.stf-box p strong { color: var(--gold-soft); font-style: normal; }
+.stf-box p .rev-tag {
+  display: inline-block;
+  font-family: var(--ff-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--red-dim);
+  color: var(--red);
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-style: normal;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── DATA TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 15.5px;
+}
+.data-table thead tr {
+  border-bottom: 2px solid var(--border2);
+}
+.data-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-family: var(--ff-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--txt3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+}
+.data-table th:first-child { color: var(--gold); }
+.data-table td {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--txt);
+  background: var(--bg2);
+  font-family: var(--ff-body);
+  line-height: 1.6;
+}
+.data-table td:first-child {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--teal);
+  background: var(--bg3);
+  white-space: nowrap;
+}
+.data-table tr:hover td { background: rgba(201,168,76,.03); }
+.data-table td b { color: var(--gold-soft); font-weight: 600; }
+.data-table td .warn { color: var(--amber); font-weight: 600; }
+.data-table td .ok   { color: var(--green); font-weight: 600; }
+.data-table td .bad  { color: var(--red); font-weight: 600; }
+
+/* ── FLOW ── */
+.flow { margin: 20px 0; border: 1px solid var(--border); }
+.flow-row {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.flow-row:last-child { border-bottom: none; }
+.flow-row:hover { background: rgba(255,255,255,.02); }
+.flow-row.flow-header { background: #0D1B2E; border-bottom: 1px solid var(--border2); }
+.flow-row.flow-pass   { background: var(--green-dim); }
+.flow-row.flow-fail   { background: var(--red-dim); }
+.flow-row.flow-note   { background: var(--purple-dim); }
+.flow-index {
+  width: 52px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--border);
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--txt3);
+}
+.flow-row.flow-header .flow-index { color: var(--blue); }
+.flow-row.flow-pass   .flow-index { color: var(--green); }
+.flow-row.flow-fail   .flow-index { color: var(--red); }
+.flow-row.flow-note   .flow-index { color: var(--purple); }
+.flow-body {
+  padding: 12px 18px;
+  font-family: var(--ff-body);
+  font-size: 15.5px;
+  color: var(--txt);
+  line-height: 1.55;
+  flex: 1;
+}
+.flow-row.flow-header .flow-body {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-weight: 500;
+}
+.flow-row.flow-pass .flow-body { color: var(--green); font-weight: 600; }
+.flow-row.flow-fail .flow-body { color: var(--red); font-weight: 600; }
+.flow-row.flow-note .flow-body { color: var(--purple); }
+.flow-body b { color: var(--gold-soft); font-weight: 600; }
+.flow-tag {
+  flex-shrink: 0;
+  display: flex; align-items: center; padding: 0 16px;
+  border-left: 1px solid var(--border);
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--txt3);
+  white-space: nowrap;
+}
+
+/* ── SYNTHESIS TABLE ── */
+.synth {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 15px;
+}
+.synth th {
+  padding: 10px 16px;
+  text-align: left;
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--txt3);
+}
+.synth th:first-child { color: var(--gold); border-bottom: 2px solid var(--gold); }
+.synth td {
+  padding: 11px 16px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  background: var(--bg2);
+  font-family: var(--ff-body);
+}
+.synth td:first-child { color: var(--txt); }
+.synth td:nth-child(2) {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.synth td:last-child { color: var(--txt2); font-style: italic; font-size: 14.5px; }
+.synth tr:hover td { background: rgba(255,255,255,.02); }
+.s-ok   { color: var(--green)  !important; background: var(--green-dim)  !important; }
+.s-no   { color: var(--red)    !important; background: var(--red-dim)    !important; }
+.s-part { color: var(--amber)  !important; background: var(--amber-dim)  !important; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border2) 40%, var(--border2) 60%, transparent); margin: 40px 0; }
+
+/* ── INLINE HIGHLIGHT ── */
+.hl-gold   { color: var(--gold-soft); font-weight: 600; }
+.hl-red    { color: var(--red); font-weight: 600; }
+.hl-green  { color: var(--green); font-weight: 600; }
+.hl-amber  { color: var(--amber); font-weight: 600; }
+.hl-teal   { color: var(--teal); font-weight: 600; }
+.hl-purple { color: var(--purple); font-weight: 600; }
+
+/* ── SUB TITLE ── */
+h3 {
+  font-family: var(--ff-disp);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin: 36px 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+h3 .h3-bar {
+  display: block; width: 24px; height: 2px;
+  background: var(--chapter-color, var(--gold));
+  flex-shrink: 0;
+}
+
+/* ── REVEAL ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 110px; }
+  .hero-right { display: none; }
+  .main { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .content { padding: 40px 0; }
+}
+@media (max-width: 700px) {
+  nav { padding: 16px 20px; }
+  .nav-toc { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .main { padding: 0 20px 80px; }
+  .art-block { grid-template-columns: 60px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="cursor"     id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="legislacao_home.html" class="nav-back">Codex Legislativo</a>
+  <div class="nav-logo">Lei 1.079/50</div>
+  <ul class="nav-toc">
+    <li><a href="#visao">Visão Geral</a></li>
+    <li><a href="#denuncia">Denúncia</a></li>
+    <li><a href="#acusacao">Acusação</a></li>
+    <li><a href="#julgamento">Julgamento</a></li>
+    <li><a href="#impedimentos">Impedimentos</a></li>
+    <li><a href="#sintese">Síntese</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Crimes de Responsabilidade</div>
+      <h1>Lei<br><span class="accent">1.079</span><br>de 1950</h1>
+      <p class="hero-subtitle">Define os crimes de responsabilidade e regula o processo de julgamento do Presidente da República e outras altas autoridades.</p>
+      <div class="hero-meta">
+        <span class="meta-chip active">ADPF 378 · 2016</span>
+        <span class="meta-chip active">ADPF 740 · 2020</span>
+        <span class="meta-chip">MS 34131 · 2016</span>
+        <span class="meta-chip">Recepção CF/88</span>
+        <span class="meta-chip">Impeachment</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="toc-card">
+        <div class="toc-label">Índice</div>
+        <ul class="toc-list">
+          <li class="toc-item"><a href="#visao"><span class="toc-num">00</span> Visão Geral &amp; Status<span class="toc-badge badge-gold">Intro</span></a></li>
+          <li class="toc-item"><a href="#denuncia"><span class="toc-num">4.1</span> Quanto à Denúncia<span class="toc-badge badge-teal">Arts. 14–18</span></a></li>
+          <li class="toc-item"><a href="#acusacao"><span class="toc-num">4.2</span> Quanto à Acusação<span class="toc-badge badge-blue">Arts. 19–23</span></a></li>
+          <li class="toc-item"><a href="#julgamento"><span class="toc-num">4.3</span> Quanto ao Julgamento<span class="toc-badge badge-purple">Arts. 24–35</span></a></li>
+          <li class="toc-item"><a href="#impedimentos"><span class="toc-num">4.4</span> Impedimentos &amp; Subsidiárias<span class="toc-badge badge-gold">Arts. 36–49</span></a></li>
+          <li class="toc-item"><a href="#sintese"><span class="toc-num">★</span> Quadro-Síntese Final<span class="toc-badge badge-gold">Revisão</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-watermark">1079</div>
+  </section>
+
+  <!-- MAIN: SIDEBAR + CONTENT -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navegação</div>
+        <ul class="sidebar-links" id="sidebarLinks">
+          <li><a href="#visao"       class="active"><span class="sidebar-dot"></span> Visão Geral</a></li>
+          <li><a href="#denuncia"           ><span class="sidebar-dot"></span> Denúncia</a></li>
+          <li><a href="#acusacao"           ><span class="sidebar-dot"></span> Acusação</a></li>
+          <li><a href="#julgamento"         ><span class="sidebar-dot"></span> Julgamento</a></li>
+          <li><a href="#impedimentos"       ><span class="sidebar-dot"></span> Impedimentos</a></li>
+          <li><a href="#sintese"            ><span class="sidebar-dot"></span> Síntese</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Jurisprudência</div>
+        <ul class="sidebar-links">
+          <li><a href="#adpf378"><span class="sidebar-dot"></span>ADPF 378/2016</a></li>
+          <li><a href="#adpf740"><span class="sidebar-dot"></span>ADPF 740/2020</a></li>
+          <li><a href="#ms34131"><span class="sidebar-dot"></span>MS 34131/2016</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Alertas</div>
+        <ul class="sidebar-links">
+          <li><a href="#art15-rev"><span class="sidebar-dot" style="background:var(--red)"></span> Art. 15 — Revogado</a></li>
+          <li><a href="#dupla-rev"><span class="sidebar-dot" style="background:var(--red)"></span> Dupla deliberação</a></li>
+          <li><a href="#inabilitacao"><span class="sidebar-dot" style="background:var(--amber)"></span> Inabilitação: 8 anos</a></li>
+          <li><a href="#testemunhas"><span class="sidebar-dot" style="background:var(--amber)"></span> Mín. 5 testemunhas</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ══════════════════════════════════════════════
+           0. VISÃO GERAL
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="visao" style="--chapter-color: var(--gold);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>00</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Introdução</div>
+            <div class="chapter-title">Visão Geral &amp; Status</div>
+          </div>
+        </div>
+
+        <div class="callout c-gold reveal">
+          <div class="callout-head">Objeto da Lei</div>
+          <p>Define os <strong>crimes de responsabilidade</strong> e regula o respectivo <strong>processo de julgamento</strong>. Está profundamente envelhecida e superada em vários pontos — <strong>o que não contraria a Constituição vigente permanece em vigor</strong>.</p>
+        </div>
+
+        <div id="adpf378" class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 378 · 2016</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>A Lei 1.079/50 foi <strong>recepcionada em grande parte</strong> pela CF/88. A ação é cabível mesmo que requeira, indiretamente, a declaração de inconstitucionalidade de norma posterior à CF.</p>
+          <p>Aplica-se o <strong>devido processo legal</strong> no processo de impeachment, observadas as disposições específicas inscritas na CF e na lei e a natureza do processo, ou o caráter político do juízo.</p>
+        </div>
+
+        <div id="adpf740" class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 740 · 2020</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>Não revogada, tácita ou expressamente, por legislação superveniente, subsiste a Lei 1.079/50 <strong>em tudo quanto o seu conteúdo não contraria a Constituição vigente</strong>.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           4.1 DENÚNCIA
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="denuncia" style="--chapter-color: var(--teal);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>4.1</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 14 – 18</div>
+            <div class="chapter-title">Quanto à Denúncia</div>
+          </div>
+        </div>
+
+        <!-- Art 14 -->
+        <h3 class="reveal"><span class="h3-bar"></span> Art. 14 — Legitimidade para denunciar</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>14</strong>art.</div>
+          <div class="art-text">É permitido a qualquer <b>cidadão</b> denunciar o <b>Presidente da República</b> ou <b>Ministro de Estado</b>, por crime de responsabilidade, perante a <b>Câmara dos Deputados</b>.</div>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Termo</th><th>Interpretação</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>"Cidadão"</td>
+              <td>Na linguagem constitucional atual: pessoa detentora da condição de <b>eleitor</b> no Brasil. À época da lei, era usada genericamente para qualquer pessoa.</td>
+            </tr>
+            <tr>
+              <td>Entidades civis</td>
+              <td>O STF decidiu que não se elimina a possibilidade de denúncia por <b>entidade da sociedade civil</b> (OAB, CNBB, ABI — já ocorreu e foi validado).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="divider"></div>
+
+        <!-- Art 15 -->
+        <h3 class="reveal" id="art15-rev"><span class="h3-bar"></span> Art. 15 — Prazo para recebimento</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>15</strong>art.</div>
+          <div class="art-text"><span class="rev">A denúncia só poderá ser recebida enquanto o denunciado não tiver, por qualquer motivo, deixado definitivamente o cargo.</span></div>
+        </div>
+        <div class="callout c-red reveal">
+          <div class="callout-head">⚠ Revogado — Não Recepcionado</div>
+          <p>O STF decidiu que a <strong>renúncia do Presidente</strong> ao início da sessão de julgamento do impeachment pelo Senado <strong>NÃO extingue o processo</strong>, diante da possibilidade de aplicação da pena de <strong>inabilitação por 8 anos</strong> para cargos e funções públicas.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Art 16 -->
+        <h3 class="reveal" id="testemunhas"><span class="h3-bar"></span> Art. 16 — Requisitos da denúncia</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>16</strong>art.</div>
+          <div class="art-text">A denúncia <b>assinada</b> pelo denunciante e com a <b>firma reconhecida</b>, deve ser acompanhada dos documentos que a comprovem, ou da declaração de impossibilidade de apresentá-los, com a indicação do local onde possam ser encontrados; nos crimes de que haja prova testemunhal, a denúncia deverá conter o rol das testemunhas, em número de <b>cinco no mínimo</b>.</div>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Requisito</th><th>Detalhe</th></tr></thead>
+          <tbody>
+            <tr><td>Assinatura + firma reconhecida</td><td>Elimina o anonimato e atribui <b>certeza à identidade</b> do denunciante.</td></tr>
+            <tr><td>Identificação do denunciante</td><td>Deve ser <b>identificado e qualificado</b>. Não precisa de advogado.</td></tr>
+            <tr><td>Documentos obtidos</td><td>Devem ser <b>acostados</b> à peça de denúncia.</td></tr>
+            <tr><td>Documentos fora do alcance</td><td>Indicação de <b>onde possam ser encontrados</b>.</td></tr>
+            <tr><td>Testemunhas</td><td><span class="warn">Mínimo de 5</span> — balizado pelo <b>MÍNIMO</b>, não pelo máximo.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout c-amber reveal">
+          <div class="callout-head">⚡ Atenção — Ponto de Prova</div>
+          <p>Normalmente a quantidade de testemunhas é balizada pelo <strong>máximo</strong>. Nessa lei é balizada pelo <strong>MÍNIMO</strong>. O número mínimo de testemunhas é <strong>5</strong>.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Arts 17-18 -->
+        <h3 class="reveal"><span class="h3-bar"></span> Arts. 17–18 — Escrivão e Oitiva de Testemunhas</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>17</strong>art.</div>
+          <div class="art-text">Servirá de <b>escrivão</b> um funcionário da Secretaria da <b>Câmara dos Deputados</b> ou do <b>Senado</b>, conforme se achar o processo em uma ou outra Casa do Congresso Nacional.</div>
+        </div>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>18</strong>art.</div>
+          <div class="art-text">As testemunhas arroladas no processo deverão comparecer para prestar o seu depoimento, e a <b>Mesa da Câmara</b> ou do <b>Senado</b> tomará as providências legais para compeli-las à obediência.</div>
+        </div>
+        <div class="callout c-blue reveal">
+          <div class="callout-head">Interpretação Atual</div>
+          <p>A menção à Mesa da Câmara para oitiva das testemunhas está <strong>vencida</strong>. As testemunhas serão ouvidas <strong>apenas pelo Senado</strong>, por ser nesta Casa que se desenvolverá a instrução probatória.</p>
+        </div>
+
+        <!-- STF MS 34131 -->
+        <h3 class="reveal" id="ms34131"><span class="h3-bar"></span> Decisão — MS 34.131 / 2016</h3>
+        <div class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">MS 34131 · 2016 — Papel da Câmara</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>Compete à Câmara dos Deputados <strong>autorizar a instauração do processo</strong>. A Câmara exerce, assim, um <strong>juízo eminentemente político</strong> sobre os fatos narrados — isso é condição para o prosseguimento da denúncia.</p>
+          <p>A Câmara faz apenas <strong>análise formal</strong>. Pode fazer exame probatório e testemunhal para verificar os requisitos necessários ao processamento. Mas <strong>NÃO se posiciona sobre a culpabilidade</strong>: na análise da Câmara <strong>NÃO pode haver juízo de mérito</strong>.</p>
+        </div>
+
+        <h3 class="reveal" id="dupla-rev"><span class="h3-bar"></span> ADPF 740 / 2020 — Vice-Presidente &amp; Dupla Deliberação</h3>
+        <div class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 740 · 2020 — Vice-Presidente</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>Viável a imputação de crime de responsabilidade ao <strong>Vice-Presidente da República</strong>. O impeachment é instrumento constitucional de controle político, administrativo e disciplinar — e <strong>não de direito penal</strong>. Não se aplicam os rigores do processo penal, notadamente a <strong>tipicidade estrita</strong>.</p>
+        </div>
+        <div class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 740 · 2020 — Dupla Deliberação <span class="rev-tag">Não Recepcionado</span></span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>O STF reputou <strong>NÃO RECEPCIONADA</strong> a previsão de dupla deliberação na Câmara. Somente para decidir sobre a "procedência da acusação" exige-se <strong>maioria qualificada de 2/3</strong>; <strong>maioria absoluta</strong> é suficiente para julgar a admissibilidade da denúncia.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           4.2 ACUSAÇÃO
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="acusacao" style="--chapter-color: var(--blue);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>4.2</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 19 – 23</div>
+            <div class="chapter-title">Quanto à Acusação</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Arts. 19–20 — Comissão Especial</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>19</strong>art.</div>
+          <div class="art-text">Recebida a denúncia, será lida no expediente da sessão seguinte e despachada a uma <b>comissão especial eleita</b>, da qual participem, observada a respectiva proporção, representantes de todos os partidos para opinar sobre a mesma.</div>
+        </div>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>20</strong>art.</div>
+          <div class="art-text">A comissão se reunirá dentro de <b>48 horas</b> e, depois de eleger seu Presidente e relator, emitirá <b>parecer dentro de 10 dias</b> sobre se a denúncia deve ser ou não julgada objeto de deliberação. Dentro desse período poderá proceder às <b>diligências que julgar necessárias</b> ao esclarecimento da denúncia.</div>
+        </div>
+        <div class="callout c-blue reveal">
+          <div class="callout-head">Interpretação Conforme CF/88 — ADPF 378</div>
+          <p>A proporcionalidade pode ser aferida também por <strong>blocos parlamentares</strong>, não só por partidos políticos. As diligências dos arts. 19 e 20 <strong>NÃO se destinam a provar a (im)procedência da acusação</strong> — apenas a esclarecer a denúncia. A tarefa de julgar a procedência cabe ao Senado.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Fluxo da Comissão Especial</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header">
+            <div class="flow-index">—</div>
+            <div class="flow-body">Fluxo Completo — Comissão Especial na Câmara</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">01</div>
+            <div class="flow-body">Constituição da Comissão Especial</div>
+            <div class="flow-tag">início</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">02</div>
+            <div class="flow-body">Reunião de instalação — Eleição do <b>Presidente</b> e do <b>Relator</b></div>
+            <div class="flow-tag">48 h</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">03</div>
+            <div class="flow-body">Autos da denúncia vão ao relator</div>
+            <div class="flow-tag"></div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">04</div>
+            <div class="flow-body">Realização de <b>diligências</b> para esclarecer a denúncia (apenas para esclarecer — não para provar procedência)</div>
+            <div class="flow-tag">10 dias</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">05</div>
+            <div class="flow-body">Apresentação do Relatório → Discussão → Votação aberta por <b>maioria simples</b></div>
+            <div class="flow-tag"></div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">06</div>
+            <div class="flow-body">Conclusão do <b>parecer</b> formalizando a decisão → Presidente da Câmara</div>
+            <div class="flow-tag"></div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">07</div>
+            <div class="flow-body">Leitura do parecer no expediente da sessão seguinte</div>
+            <div class="flow-tag">§1º</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">08</div>
+            <div class="flow-body">Publicação integral no <b>Diário da Câmara (DCD)</b> e em avulsos, distribuídos a todos os deputados</div>
+            <div class="flow-tag">§1º</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">09</div>
+            <div class="flow-body">Inclusão na <b>Ordem do Dia</b> como <b>1º item</b> — discussão única</div>
+            <div class="flow-tag">48 h</div>
+          </div>
+          <div class="flow-row flow-note">
+            <div class="flow-index">10</div>
+            <div class="flow-body"><b>5 representantes</b> de cada partido ou bloco falam por <b>1 hora</b>; o relator da Comissão Especial pode responder a cada orador (Art. 21)</div>
+            <div class="flow-tag">Art. 21</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">11</div>
+            <div class="flow-body">Encerramento da discussão → <b>Votação nominal</b> (norte para sul, alternadamente)</div>
+            <div class="flow-tag">Art. 23</div>
+          </div>
+          <div class="flow-row flow-pass">
+            <div class="flow-index">✓</div>
+            <div class="flow-body">DEFERIMENTO → Resolução promulgada pelo Presidente da Câmara → Envio ao Senado — exige <b>2/3</b> dos membros da Câmara</div>
+            <div class="flow-tag">2/3</div>
+          </div>
+          <div class="flow-row flow-fail">
+            <div class="flow-index">✗</div>
+            <div class="flow-body">INDEFERIMENTO → Arquivamento</div>
+            <div class="flow-tag">fim</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Art. 22–23 — Votação, Intimação e Envio</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>22</strong>art.</div>
+          <div class="art-text">Encerrada a discussão do parecer e submetido a <b>votação nominal</b>, será a denúncia <b>arquivada</b>, se não for considerada objeto de deliberação. <em>(Única parte recepcionada)</em></div>
+        </div>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>23</strong>art.</div>
+          <div class="art-text">Votação nominal — <b>não são permitidas</b> questões de ordem nem encaminhamento de votação. <b>§ 2º</b> Decretada a acusação, o denunciado será <b>intimado imediatamente</b> pela Mesa da Câmara, por intermédio do <b>1º Secretário</b>. <b>§ 3º</b> Se ausente do DF, a intimação é solicitada ao <b>Presidente do TJ do Estado</b> em que se encontrar. <b>§ 6º</b> O processo será enviado ao <b>STF</b> (crime comum) ou ao <b>Senado Federal</b> (crime de responsabilidade).</div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           4.3 JULGAMENTO
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="julgamento" style="--chapter-color: var(--purple);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>4.3</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 24 – 35</div>
+            <div class="chapter-title">Quanto ao Julgamento</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Art. 24 — Recebimento no Senado</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>24</strong>art.</div>
+          <div class="art-text">Recebido no Senado o <b>decreto de acusação</b> com o processo enviado pela Câmara e apresentado o <b>libelo</b> pela comissão acusadora, remeterá o Presidente cópia de tudo ao acusado, que será <b>notificado para comparecer</b> em dia prefixado perante o Senado.</div>
+        </div>
+        <div class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 378 · 2016 — Art. 24</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>Com o advento da CF/88, o recebimento da denúncia no processo de impeachment ocorre apenas após a <strong>decisão do Plenário do Senado</strong>, em votação nominal tomada por <strong>maioria simples</strong> e presente a <strong>maioria absoluta</strong> de seus membros.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Arts. 25–26 — Defesa do Acusado</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>25</strong>art.</div>
+          <div class="art-text">O acusado comparecerá, <b>por si ou pelos seus advogados</b>, podendo, ainda, oferecer <b>novos meios de prova</b>.</div>
+        </div>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>26</strong>art.</div>
+          <div class="art-text">No caso de <b>revelia</b>, marcará o Presidente novo dia para o julgamento e nomeará para a defesa do acusado um <b>advogado (defensor dativo)</b>, a quem se facultará o exame de <b>todas as peças de acusação</b>.</div>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Situação</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Comparecimento</td>
+              <td>Por si ou pelos seus advogados. Pode oferecer novos meios de prova — contraditório e <b>ampla defesa</b>.</td>
+            </tr>
+            <tr>
+              <td>Revelia</td>
+              <td>Defensor dativo — <b>necessariamente advogado</b>, mas <span class="bad">não necessariamente membro do Senado</span>. Tem tempo bastante para exame de todas as peças.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Arts. 27–31 — Ordem dos Trabalhos no Senado</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>27</strong>art.</div>
+          <div class="art-text">O <b>Presidente do STF</b> abrirá a sessão, mandará ler o processo preparatório, o libelo e os artigos de defesa; em seguida inquirirá as testemunhas, que deverão depor <b>publicamente</b> e <b>fora da presença umas das outras</b>.</div>
+        </div>
+        <div class="flow reveal">
+          <div class="flow-row flow-header">
+            <div class="flow-index">—</div>
+            <div class="flow-body">Ordem dos Trabalhos — Sessão de Julgamento no Senado Federal</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">01</div>
+            <div class="flow-body">Abertura da sessão pelo <b>Presidente do STF</b></div>
+            <div class="flow-tag">Art. 27</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">02</div>
+            <div class="flow-body">Leitura do <b>processo preparatório</b>, do <b>libelo acusatório</b> e dos <b>artigos de defesa</b></div>
+            <div class="flow-tag">Art. 27</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">03</div>
+            <div class="flow-body">Inquirição de <b>testemunhas</b> — publicamente e fora da presença umas das outras</div>
+            <div class="flow-tag">Art. 27</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">04</div>
+            <div class="flow-body">Perguntas às testemunhas: qualquer <b>Senador</b> (membro ou não da comissão), o acusado ou seus advogados. Podem arguir e requerer a <b>acareação</b>.</div>
+            <div class="flow-tag">Art. 28</div>
+          </div>
+          <div class="flow-row flow-note">
+            <div class="flow-index">05</div>
+            <div class="flow-body"><b>Debate verbal</b> entre comissão acusadora e defesa — prazo máximo: <b>2 horas</b></div>
+            <div class="flow-tag">Art. 29</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">06</div>
+            <div class="flow-body">Retiradas as partes: discussão restrita aos <b>membros do Senado</b></div>
+            <div class="flow-tag">Art. 30</div>
+          </div>
+          <div class="flow-row">
+            <div class="flow-index">07</div>
+            <div class="flow-body"><b>Relatório resumido</b> da denúncia e das provas pelo Presidente do STF</div>
+            <div class="flow-tag">Art. 31</div>
+          </div>
+          <div class="flow-row flow-pass">
+            <div class="flow-index">08</div>
+            <div class="flow-body"><b>Votação nominal e ostensiva</b> dos Senadores</div>
+            <div class="flow-tag">Art. 31</div>
+          </div>
+        </div>
+
+        <h3 class="reveal" id="inabilitacao"><span class="h3-bar"></span> Arts. 32–35 — Decisão Final</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Resultado</th><th>Efeito</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Absolvição<br>Art. 32</td>
+              <td>Produz, desde logo, <b>todos os efeitos</b> a favor do acusado. Se suspenso das funções, <b>retoma imediatamente o cargo</b>.</td>
+            </tr>
+            <tr>
+              <td>Condenação<br>Art. 33</td>
+              <td>Inabilitação <span class="warn">obrigatoriamente por 8 anos</span> para qualquer função pública. O Senado <b>NÃO delibera</b> sobre o prazo. Se houver crimes comuns, os autos são enviados ao <b>Poder Judiciário</b>.</td>
+            </tr>
+            <tr>
+              <td>Destituição<br>Art. 34</td>
+              <td>Proferida a sentença condenatória, o acusado está <span class="bad">ipso facto destituído do cargo</span>.</td>
+            </tr>
+            <tr>
+              <td>Forma<br>Art. 35</td>
+              <td><b>Resolução do Senado</b> — exige <span class="warn">2/3</span> da Casa. Lavrada pelo Presidente do STF, assinada pelos Senadores que funcionaram como juízes. Publicada no <b>Diário Oficial</b> e no DCD.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout c-amber reveal">
+          <div class="callout-head">⚡ Atenção — Inabilitação</div>
+          <p>A inabilitação é <strong>OBRIGATORIAMENTE de 8 anos</strong> — o Senado não delibera sobre o prazo. A decisão condenatória exige <strong>DOIS TERÇOS</strong> do Senado e toma a forma de <strong>Resolução</strong>.</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           4.4 IMPEDIMENTOS
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="impedimentos" style="--chapter-color: var(--gold);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>4.4</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 36 – 49</div>
+            <div class="chapter-title">Impedimentos &amp; Normas Subsidiárias</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Art. 36 — Impedimentos</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>36</strong>art.</div>
+          <div class="art-text">Não pode interferir, em <b>nenhuma fase</b> do processo, o deputado ou senador que: <b>(a)</b> tiver parentesco consanguíneo ou afim, em linha reta; na linha colateral: <b>irmãos, cunhados</b> (enquanto durar o cunhadio) e <b>primos coirmãos</b>; <b>(b)</b> como <b>testemunha do processo</b> tiver deposto de ciência própria.</div>
+        </div>
+        <div class="callout c-gold reveal">
+          <div class="callout-head">STF — Hipóteses de Impedimento</div>
+          <p>A Lei 1.079/50 já veicula as hipóteses de impedimento, que foram recepcionadas. <strong>Não há</strong> utilização subsidiária do CPP para trazer outros impedimentos e suspeições.</p>
+          <p style="margin-top:8px">A <strong>atuação política de oposição</strong> ao Governo de determinado parlamentar <strong>NÃO determina impedimento</strong> de participação no julgamento.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Art. 38 — Normas Subsidiárias</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>38</strong>art.</div>
+          <div class="art-text">No processo e julgamento, serão subsidiários desta lei, naquilo em que lhes forem aplicáveis, assim os <b>Regimentos Internos da Câmara e do Senado</b>, como o <b>Código de Processo Penal</b>.</div>
+        </div>
+        <div class="stf-box reveal">
+          <div class="stf-head">
+            <span class="stf-icon">⚡</span>
+            <span class="stf-case">ADPF 378 · 2016 — Art. 38</span>
+            <div class="stf-divider"></div>
+          </div>
+          <p>É possível a aplicação subsidiária dos Regimentos Internos da Câmara e do Senado ao processo de impeachment, <strong>desde que sejam compatíveis</strong> com os preceitos legais e constitucionais pertinentes.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span> Arts. 44–49 — Rito Subsidiário para o Senado</h3>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Contexto</div>
+          <p>Com a CF/88, a competência para instauração do processo passou ao Senado. Usam-se subsidiariamente os artigos que regulam o rito dos Ministros do STF e do PGR — cuja instauração já era competência do Senado, sem necessidade de autorização da Câmara.</p>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Artigo</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td>Art. 44</td><td>Denúncia recebida pela Mesa do Senado → lida na sessão seguinte → despachada a <b>comissão especial</b>.</td></tr>
+            <tr><td>Art. 45</td><td>A comissão reúne-se em <b>48 horas</b>, elege presidente e relator, emite parecer em <b>10 dias</b>.</td></tr>
+            <tr><td>Art. 46</td><td>Parecer + denúncia → lidos em sessão, publicados no DCD, distribuídos → <b>Ordem do Dia da sessão seguinte</b>.</td></tr>
+            <tr><td>Art. 47</td><td>Parecer submetido a <b>uma só discussão</b> e votação nominal — aprovado por <b>maioria simples</b>.</td></tr>
+            <tr><td>Art. 48</td><td>Se o Senado resolver que a denúncia não constitui objeto de deliberação → <b>papeis arquivados</b>.</td></tr>
+            <tr><td>Art. 49</td><td>Se considerada objeto de deliberação → Mesa remete cópia ao denunciado para responder em <b>10 dias</b>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ══════════════════════════════════════════════
+           SÍNTESE FINAL
+      ══════════════════════════════════════════════ -->
+      <div class="chapter" id="sintese" style="--chapter-color: var(--gold);">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>★</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Revisão Completa</div>
+            <div class="chapter-title">Quadro-Síntese: Recepção pela CF/88</div>
+          </div>
+        </div>
+
+        <table class="synth reveal">
+          <thead>
+            <tr>
+              <th>Dispositivo</th>
+              <th>Status</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Art. 14 — Legitimidade</td>                <td class="s-ok">✓ Recepcionado</td>       <td>Entidades da sociedade civil também podem denunciar (OAB, CNBB, ABI).</td></tr>
+            <tr><td>Art. 15 — Prazo da denúncia</td>           <td class="s-no">✗ Não recepcionado</td>   <td>Renúncia ao início do julgamento não extingue o processo.</td></tr>
+            <tr><td>Art. 16 — Requisitos</td>                  <td class="s-ok">✓ Recepcionado</td>       <td>Mínimo de 5 testemunhas — balizado pelo MÍNIMO.</td></tr>
+            <tr><td>Art. 17 — Escrivão</td>                    <td class="s-ok">✓ Recepcionado</td>       <td>Câmara ou Senado conforme a fase do processo.</td></tr>
+            <tr><td>Art. 18 — Oitiva testemunhas (Câmara)</td> <td class="s-part">⚠ Vencido</td>          <td>Testemunhas ouvidas APENAS pelo Senado.</td></tr>
+            <tr><td>Art. 19–20 — Comissão Especial</td>        <td class="s-ok">✓ Rec. c/ interp.</td>    <td>Proporcionalidade por blocos parlamentares. Diligências só para esclarecer.</td></tr>
+            <tr><td>Art. 21 — Debate no Plenário</td>          <td class="s-ok">✓ Rec. c/ interp.</td>    <td>Uso da palavra só para esclarecer — sem juízo de mérito.</td></tr>
+            <tr><td>Art. 22 — Votação/arquivamento</td>         <td class="s-part">⚠ Parcial</td>          <td>Só a parte do arquivamento foi recepcionada.</td></tr>
+            <tr><td>Dupla deliberação na Câmara</td>           <td class="s-no">✗ Não recepcionado</td>   <td>ADPF 740/2020 — revogada por não recepção.</td></tr>
+            <tr><td>Art. 24 — Recebimento no Senado</td>       <td class="s-ok">✓ Rec. c/ interp.</td>    <td>Instauração: decisão do Plenário do Senado por maioria simples.</td></tr>
+            <tr><td>Arts. 25–26 — Defesa</td>                  <td class="s-ok">✓ Recepcionado</td>       <td>Defensor dativo em caso de revelia — necessariamente advogado.</td></tr>
+            <tr><td>Art. 33 — Inabilitação</td>                <td class="s-part">⚠ Interp. conforme</td> <td>Prazo fixo de 8 anos — Senado não delibera sobre o prazo.</td></tr>
+            <tr><td>Art. 36 — Impedimentos</td>                <td class="s-ok">✓ Recepcionado</td>       <td>CPP não é aplicado subsidiariamente para impedimentos.</td></tr>
+            <tr><td>Art. 38 — Subsidiariedade</td>             <td class="s-ok">✓ Rec. c/ interp.</td>    <td>RI e CPP subsidiários, se compatíveis com a CF/88.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER LINK -->
+      <div style="margin-top:60px; padding-top:32px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;" class="reveal">
+        <div style="font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)">Lei 1.079/50 · Codex Legislativo · 2026</div>
+        <a href="legislacao_home.html" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:8px;transition:opacity .2s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">← Voltar ao Codex</a>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+</div><!-- /page -->
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx+'px'; cursor.style.top = my+'px';
+});
+(function loop(){
+  rx += (mx-rx)*.12; ry += (my-ry)*.12;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,.art-block,.callout,.stf-box,.flow-row,td,th').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cursor.style.width='16px'; cursor.style.height='16px'; ring.style.width='50px'; ring.style.height='50px'; });
+  el.addEventListener('mouseleave',()=>{ cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+// ── PROGRESS BAR ──
+const pb = document.getElementById('progress');
+document.addEventListener('scroll', ()=>{
+  pb.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+});
+
+// ── REVEAL ON SCROLL ──
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ e.target.style.transitionDelay=(i%5)*.07+'s'; e.target.classList.add('visible'); }});
+},{threshold:.08});
+reveals.forEach(el=>io.observe(el));
+
+// ── ACTIVE SIDEBAR LINK ON SCROLL ──
+const sections = document.querySelectorAll('.chapter');
+const sideLinks = document.querySelectorAll('#sidebarLinks a');
+const onScroll = () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  sideLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#'+current);
+  });
+};
+document.addEventListener('scroll', onScroll);
+</script>
+</body>
+</html>
