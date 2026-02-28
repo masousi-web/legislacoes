@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lei 9.784/99 — Codex Legislativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #09090B;
+  --bg2:         #0F0F12;
+  --bg3:         #141418;
+  --border:      #222228;
+  --border2:     #2C2C36;
+  --acc:         #2DD4BF;
+  --acc-soft:    #67E8F9;
+  --acc-dim:     #041A18;
+  --acc-glow:    rgba(45,212,191,.10);
+  --gold:        #C9A84C;
+  --gold-dim:    #2A2010;
+  --gold-soft:   #E8C97A;
+  --amber:       #F59E0B;
+  --amber-dim:   #271A00;
+  --red:         #E05252;
+  --red-dim:     #210A0A;
+  --blue:        #3B82F6;
+  --blue-dim:    #0D1A35;
+  --purple:      #A855F7;
+  --purple-dim:  #1A0A2E;
+  --green:       #22C55E;
+  --green-dim:   #071A0F;
+  --orange:      #F97316;
+  --orange-dim:  #1F0D00;
+  --txt:         #D4D4D8;
+  --txt2:        #71717A;
+  --txt3:        #3F3F46;
+  --white:       #FAFAFA;
+  --ff-disp:     'Syne', sans-serif;
+  --ff-body:     'Cormorant Garamond', serif;
+  --ff-mono:     'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--txt); font-family:var(--ff-body); font-size:18px; line-height:1.7; cursor:none; }
+
+.cursor      { position:fixed; width:10px; height:10px; background:var(--acc); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:difference; }
+.cursor-ring { position:fixed; width:36px; height:36px; border:1px solid rgba(45,212,191,.4); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+
+body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px), repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px); }
+body::after  { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(ellipse 70% 40% at 50% -5%, rgba(45,212,191,.05), transparent 65%); }
+.page { position:relative; z-index:1; }
+
+.progress-bar { position:fixed; top:0; left:0; z-index:300; height:2px; background:var(--acc); width:0%; transition:width .1s linear; box-shadow:0 0 8px var(--acc); }
+
+nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:18px 48px; border-bottom:1px solid var(--border); background:rgba(9,9,11,.88); backdrop-filter:blur(20px); }
+.nav-back { font-family:var(--ff-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--txt2); text-decoration:none; display:flex; align-items:center; gap:10px; transition:color .2s; }
+.nav-back:hover { color:var(--acc); }
+.nav-back::before { content:'←'; font-size:14px; }
+.nav-logo { font-family:var(--ff-mono); font-size:12px; letter-spacing:.22em; color:var(--acc); text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.nav-logo::before { content:'§'; font-size:18px; font-family:var(--ff-body); }
+.nav-toc { display:flex; gap:24px; list-style:none; }
+.nav-toc a { font-family:var(--ff-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--txt3); text-decoration:none; transition:color .2s; }
+.nav-toc a:hover { color:var(--acc); }
+
+/* HERO */
+.hero { min-height:92vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:140px 48px 80px; gap:80px; position:relative; overflow:hidden; }
+.hero-watermark { position:absolute; right:-40px; bottom:-70px; font-family:var(--ff-disp); font-size:clamp(100px,16vw,240px); font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(45,212,191,.05); letter-spacing:-0.04em; line-height:1; user-select:none; pointer-events:none; white-space:nowrap; }
+.hero-left { animation:fadeUp .8s ease both; }
+.hero-eyebrow { font-family:var(--ff-mono); font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--acc); margin-bottom:20px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:''; display:block; width:36px; height:1px; background:var(--acc); }
+.hero h1 { font-family:var(--ff-disp); font-size:clamp(44px,5.5vw,78px); font-weight:800; line-height:.9; letter-spacing:-0.03em; color:var(--white); margin-bottom:28px; }
+.hero h1 .accent { color:var(--acc); }
+.hero-subtitle { font-family:var(--ff-body); font-size:20px; font-weight:300; font-style:italic; color:var(--txt2); margin-bottom:36px; line-height:1.6; max-width:440px; }
+.hero-meta { display:flex; flex-wrap:wrap; gap:10px; }
+.meta-chip { font-family:var(--ff-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; padding:6px 14px; border:1px solid var(--border2); color:var(--txt2); border-radius:2px; transition:border-color .2s,color .2s; cursor:none; }
+.meta-chip:hover { border-color:var(--acc); color:var(--acc); }
+.meta-chip.active { border-color:var(--acc); color:var(--acc); background:var(--acc-dim); }
+
+.hero-right { animation:fadeUp .8s .15s ease both; }
+.toc-card { border:1px solid var(--border2); border-top:2px solid var(--acc); background:var(--bg2); padding:32px; position:relative; overflow:hidden; }
+.toc-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--acc-glow), transparent); pointer-events:none; }
+.toc-label { font-family:var(--ff-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+.toc-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+.toc-list { list-style:none; display:flex; flex-direction:column; gap:2px; }
+.toc-item a { display:flex; align-items:center; gap:14px; padding:11px 14px; text-decoration:none; font-family:var(--ff-body); font-size:16px; color:var(--txt2); border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s,padding .2s; }
+.toc-item a:hover { color:var(--white); border-left-color:var(--acc); background:rgba(45,212,191,.06); padding-left:20px; }
+.toc-num { font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); min-width:28px; }
+.toc-badge { margin-left:auto; font-family:var(--ff-mono); font-size:9px; letter-spacing:.1em; padding:2px 8px; border-radius:2px; }
+.badge-teal   { background:var(--acc-dim);    color:var(--acc); }
+.badge-gold   { background:var(--gold-dim);   color:var(--gold); }
+.badge-amber  { background:var(--amber-dim);  color:var(--amber); }
+.badge-blue   { background:var(--blue-dim);   color:var(--blue); }
+.badge-purple { background:var(--purple-dim); color:var(--purple); }
+.badge-red    { background:var(--red-dim);    color:var(--red); }
+.badge-green  { background:var(--green-dim);  color:var(--green); }
+
+/* MAIN */
+.main { display:grid; grid-template-columns:240px 1fr; max-width:1300px; margin:0 auto; padding:0 48px 120px; }
+
+/* SIDEBAR */
+.sidebar { position:sticky; top:72px; height:calc(100vh - 72px); overflow-y:auto; padding:48px 24px 48px 0; border-right:1px solid var(--border); scrollbar-width:thin; scrollbar-color:var(--border2) transparent; }
+.sidebar-section { margin-bottom:32px; }
+.sidebar-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:10px; padding-left:12px; }
+.sidebar-links { list-style:none; display:flex; flex-direction:column; gap:1px; }
+.sidebar-links a { display:flex; align-items:center; gap:10px; padding:8px 12px; font-family:var(--ff-body); font-size:15px; color:var(--txt3); text-decoration:none; border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s; }
+.sidebar-links a:hover { color:var(--txt); background:var(--bg3); }
+.sidebar-links a.active { color:var(--acc); border-left-color:var(--acc); background:var(--acc-dim); }
+.sidebar-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.5; flex-shrink:0; }
+
+/* CONTENT */
+.content { padding:48px 0 48px 56px; }
+
+/* CHAPTER */
+.chapter { margin-bottom:80px; scroll-margin-top:90px; }
+.chapter-head { display:flex; align-items:flex-start; gap:24px; margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid var(--border); position:relative; }
+.chapter-head::after { content:''; position:absolute; bottom:-1px; left:0; height:2px; width:60px; background:var(--chapter-color,var(--acc)); }
+.chapter-num-block { flex-shrink:0; width:52px; height:52px; border:1px solid var(--chapter-color,var(--acc)); display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.3); }
+.chapter-num-block span { font-family:var(--ff-mono); font-size:11px; font-weight:600; color:var(--chapter-color,var(--acc)); letter-spacing:.06em; }
+.chapter-eyebrow { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:6px; }
+.chapter-title { font-family:var(--ff-disp); font-size:clamp(20px,2.6vw,30px); font-weight:800; color:var(--white); letter-spacing:-0.02em; line-height:1.05; }
+
+h3 { font-family:var(--ff-disp); font-size:18px; font-weight:700; color:var(--white); letter-spacing:-0.01em; margin:32px 0 12px; display:flex; align-items:center; gap:10px; }
+h3 .h3-bar { display:block; width:22px; height:2px; background:var(--chapter-color,var(--acc)); flex-shrink:0; }
+
+/* CALLOUT */
+.callout { border-left:3px solid; padding:14px 18px; margin:12px 0; position:relative; overflow:hidden; }
+.callout::before { content:''; position:absolute; inset:0; background:currentColor; opacity:.04; }
+.callout-head { font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:500; margin-bottom:8px; }
+.callout p { font-family:var(--ff-body); font-size:16px; line-height:1.65; color:var(--txt); }
+.callout p + p { margin-top:8px; }
+.callout p b, .callout p strong { font-weight:600; }
+.c-teal   { border-color:var(--acc);    color:var(--acc);    background:var(--acc-dim); }
+.c-gold   { border-color:var(--gold);   color:var(--gold);   background:var(--gold-dim); }
+.c-amber  { border-color:var(--amber);  color:var(--amber);  background:var(--amber-dim); }
+.c-red    { border-color:var(--red);    color:var(--red);    background:var(--red-dim); }
+.c-blue   { border-color:var(--blue);   color:var(--blue);   background:var(--blue-dim); }
+.c-purple { border-color:var(--purple); color:var(--purple); background:var(--purple-dim); }
+.c-green  { border-color:var(--green);  color:var(--green);  background:var(--green-dim); }
+.c-orange { border-color:var(--orange); color:var(--orange); background:var(--orange-dim); }
+
+/* STJ / STF BOX */
+.jur-box { border:1px solid rgba(45,212,191,.25); border-left:3px solid var(--acc); background:linear-gradient(135deg, #040F0E, #030807); padding:18px 22px; margin:16px 0; position:relative; }
+.jur-box.jur-stf { border-color:rgba(201,168,76,.25); border-left-color:var(--gold); background:linear-gradient(135deg, #131000, #0A0900); }
+.jur-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.jur-case { font-family:var(--ff-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc); font-weight:500; }
+.jur-box.jur-stf .jur-case { color:var(--gold); }
+.jur-divider { flex:1; height:1px; background:rgba(45,212,191,.15); }
+.jur-box.jur-stf .jur-divider { background:rgba(201,168,76,.15); }
+.jur-box p { font-family:var(--ff-body); font-size:15.5px; font-style:italic; color:rgba(100,220,200,.8); line-height:1.65; }
+.jur-box.jur-stf p { color:#C5B06A; }
+.jur-box p + p { margin-top:8px; }
+.jur-box p strong { font-style:normal; color:var(--acc-soft); }
+.jur-box.jur-stf p strong { color:var(--gold-soft); }
+.jur-icon { font-size:14px; }
+
+/* PRINCIPLES TABLE */
+.princ-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
+.princ-table th { padding:10px 16px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.princ-table th:first-child { color:var(--acc); border-bottom:2px solid var(--acc); min-width:160px; }
+.princ-table td { padding:13px 16px; border:1px solid var(--border); vertical-align:top; background:var(--bg2); font-family:var(--ff-body); line-height:1.65; font-size:15.5px; }
+.princ-table td:first-child { font-family:var(--ff-mono); font-size:11px; color:var(--acc-soft); background:var(--bg3); font-weight:500; line-height:1.5; font-style:normal; }
+.princ-table tr:hover td { background:rgba(45,212,191,.02); }
+.princ-table td b { color:var(--gold-soft); font-weight:600; font-style:normal; }
+.princ-table td .bad  { color:var(--red);   font-weight:600; font-style:normal; }
+.princ-table td .ok   { color:var(--green); font-weight:600; font-style:normal; }
+.princ-table td .warn { color:var(--amber); font-weight:600; font-style:normal; }
+.princ-table td em { color:var(--acc-soft); font-style:italic; }
+
+/* DATA TABLE */
+.data-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15.5px; }
+.data-table th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.data-table th:first-child { color:var(--gold); }
+.data-table td { padding:12px 14px; border:1px solid var(--border); vertical-align:top; color:var(--txt); background:var(--bg2); font-family:var(--ff-body); line-height:1.6; }
+.data-table td:first-child { font-family:var(--ff-mono); font-size:12px; color:var(--acc); background:var(--bg3); white-space:nowrap; }
+.data-table tr:hover td { background:rgba(45,212,191,.015); }
+.data-table td b { color:var(--gold-soft); font-weight:600; }
+.data-table td .bad  { color:var(--red);    font-weight:600; }
+.data-table td .ok   { color:var(--green);  font-weight:600; }
+.data-table td .warn { color:var(--amber);  font-weight:600; }
+
+/* FLOW */
+.flow { margin:16px 0; border:1px solid var(--border); }
+.flow-row { display:flex; align-items:stretch; border-bottom:1px solid var(--border); transition:background .15s; }
+.flow-row:last-child { border-bottom:none; }
+.flow-row:hover { background:rgba(255,255,255,.015); }
+.flow-row.flow-header { background:#041A18; border-bottom:1px solid rgba(45,212,191,.18); }
+.flow-row.flow-pass   { background:var(--green-dim); }
+.flow-row.flow-fail   { background:var(--red-dim); }
+.flow-row.flow-note   { background:var(--amber-dim); }
+.flow-row.flow-special { background:var(--blue-dim); }
+.flow-index { width:52px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); }
+.flow-row.flow-header  .flow-index { color:var(--acc); }
+.flow-row.flow-pass    .flow-index { color:var(--green); }
+.flow-row.flow-fail    .flow-index { color:var(--red); }
+.flow-row.flow-note    .flow-index { color:var(--amber); }
+.flow-row.flow-special .flow-index { color:var(--blue); }
+.flow-body { padding:12px 18px; font-family:var(--ff-body); font-size:15.5px; color:var(--txt); line-height:1.55; flex:1; }
+.flow-row.flow-header  .flow-body { font-family:var(--ff-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc); font-weight:500; }
+.flow-row.flow-pass    .flow-body { color:var(--green); font-weight:600; }
+.flow-row.flow-fail    .flow-body { color:var(--red); font-weight:600; }
+.flow-row.flow-note    .flow-body { color:var(--amber); }
+.flow-row.flow-special .flow-body { color:var(--blue); }
+.flow-body b { color:var(--gold-soft); font-weight:600; }
+.flow-tag { flex-shrink:0; display:flex; align-items:center; padding:0 14px; border-left:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); white-space:nowrap; }
+
+/* PROCESS TIMELINE */
+.timeline { margin:20px 0; position:relative; padding-left:36px; }
+.timeline::before { content:''; position:absolute; left:10px; top:0; bottom:0; width:1px; background:linear-gradient(to bottom, var(--acc), rgba(45,212,191,.1)); }
+.timeline-item { position:relative; margin-bottom:20px; }
+.timeline-item::before { content:''; position:absolute; left:-30px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--ti-color,var(--acc)); border:2px solid var(--bg); box-shadow:0 0 0 2px var(--ti-color,var(--acc)); }
+.ti-acc    { --ti-color:var(--acc); }
+.ti-amber  { --ti-color:var(--amber); }
+.ti-blue   { --ti-color:var(--blue); }
+.ti-green  { --ti-color:var(--green); }
+.ti-purple { --ti-color:var(--purple); }
+.timeline-label { font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--ti-color,var(--acc)); margin-bottom:6px; }
+.timeline-body { font-family:var(--ff-body); font-size:15.5px; color:var(--txt); line-height:1.6; }
+.timeline-body b { color:var(--gold-soft); font-weight:600; }
+.timeline-body .dim { color:var(--txt3); font-size:14px; }
+.timeline-badge { display:inline-block; font-family:var(--ff-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; padding:2px 8px; border-radius:2px; background:var(--ti-color,var(--acc)); color:var(--bg); font-weight:600; margin-left:8px; }
+
+/* DUAL GRID */
+.dual-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:14px 0; }
+.dual-card { background:var(--bg2); border:1px solid var(--border); padding:20px; border-top:2px solid var(--dc-color,var(--acc)); position:relative; overflow:hidden; }
+.dual-card::before { content:''; position:absolute; inset:0; background:var(--dc-color,var(--acc)); opacity:.03; }
+.dc-teal   { --dc-color:var(--acc); }
+.dc-red    { --dc-color:var(--red); }
+.dc-amber  { --dc-color:var(--amber); }
+.dc-blue   { --dc-color:var(--blue); }
+.dc-purple { --dc-color:var(--purple); }
+.dc-green  { --dc-color:var(--green); }
+.dual-title { font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--dc-color,var(--acc)); margin-bottom:12px; }
+.dual-item { display:flex; align-items:flex-start; gap:9px; margin-bottom:10px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.dual-item::before { content:'›'; color:var(--dc-color,var(--acc)); flex-shrink:0; font-size:16px; margin-top:1px; }
+.dual-item b { color:var(--txt); font-weight:600; }
+.dual-item .sub { display:block; font-size:13.5px; color:var(--txt3); font-style:italic; margin-top:2px; }
+
+/* DELEGACAO / AVOCACAO COMPARE */
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:14px 0; }
+.cmp-card { background:var(--bg2); border:1px solid var(--border); padding:20px; position:relative; }
+.cmp-card:first-child { border-left:3px solid var(--acc); }
+.cmp-card:last-child  { border-left:3px solid var(--amber); }
+.cmp-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; margin-bottom:16px; }
+.cmp-card:first-child .cmp-title { color:var(--acc); }
+.cmp-card:last-child  .cmp-title { color:var(--amber); }
+.cmp-row { display:flex; gap:10px; margin-bottom:10px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.cmp-row::before { content:'›'; font-size:16px; flex-shrink:0; margin-top:1px; }
+.cmp-card:first-child .cmp-row::before { color:var(--acc); }
+.cmp-card:last-child  .cmp-row::before { color:var(--amber); }
+.cmp-row b { color:var(--txt); font-weight:600; }
+.cmp-row .bad  { color:var(--red); font-weight:600; }
+.cmp-row .ok   { color:var(--green); font-weight:600; }
+
+/* PRAZO CHIPS */
+.prazo-grid { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; }
+.prazo-chip { display:flex; flex-direction:column; align-items:center; gap:4px; background:var(--bg2); border:1px solid var(--border); padding:14px 18px; min-width:120px; position:relative; overflow:hidden; }
+.prazo-chip::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--pc-color,var(--acc)); }
+.pc-teal   { --pc-color:var(--acc); }
+.pc-amber  { --pc-color:var(--amber); }
+.pc-blue   { --pc-color:var(--blue); }
+.pc-purple { --pc-color:var(--purple); }
+.pc-green  { --pc-color:var(--green); }
+.prazo-num  { font-family:var(--ff-disp); font-size:28px; font-weight:800; color:var(--pc-color,var(--acc)); line-height:1; }
+.prazo-unit { font-family:var(--ff-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--txt3); }
+.prazo-desc { font-family:var(--ff-body); font-size:13px; color:var(--txt2); text-align:center; font-style:italic; }
+
+/* MOTIVAÇÃO CHECKLIST */
+.checklist { margin:14px 0; border:1px solid var(--border); }
+.check-item { display:flex; align-items:flex-start; gap:14px; padding:12px 16px; border-bottom:1px solid var(--border); transition:background .15s; font-family:var(--ff-body); font-size:15.5px; color:var(--txt); line-height:1.55; }
+.check-item:last-child { border-bottom:none; }
+.check-item:hover { background:rgba(45,212,191,.025); }
+.check-icon { color:var(--acc); flex-shrink:0; font-family:var(--ff-mono); font-size:13px; margin-top:2px; }
+.check-item b { color:var(--gold-soft); font-weight:600; }
+
+/* DIVIDER */
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border2) 40%,var(--border2) 60%,transparent); margin:32px 0; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+@media (max-width:1000px) {
+  .hero { grid-template-columns:1fr; min-height:auto; padding-top:110px; }
+  .hero-right { display:none; }
+  .main { grid-template-columns:1fr; }
+  .sidebar { display:none; }
+  .content { padding:40px 0; }
+  .compare,.dual-grid { grid-template-columns:1fr; }
+}
+@media (max-width:700px) {
+  nav { padding:16px 20px; }
+  .nav-toc { display:none; }
+  .hero { padding:100px 20px 60px; }
+  .main { padding:0 20px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="cursor"      id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="legislacao_home.html" class="nav-back">Codex Legislativo</a>
+  <div class="nav-logo">Lei 9.784/99</div>
+  <ul class="nav-toc">
+    <li><a href="#geral">Disposições</a></li>
+    <li><a href="#principios">Princípios</a></li>
+    <li><a href="#competencia">Competência</a></li>
+    <li><a href="#fases">Fases</a></li>
+    <li><a href="#recurso">Recurso</a></li>
+    <li><a href="#motivacao">Motivação</a></li>
+    <li><a href="#sintese">Síntese</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Direito Administrativo</div>
+      <h1>Lei<br><span class="accent">9.784</span><br>de 1999</h1>
+      <p class="hero-subtitle">Regula o processo administrativo no âmbito da Administração Pública Federal. Aplicação subsidiária em todas as esferas da Federação na ausência de lei local.</p>
+      <div class="hero-meta">
+        <span class="meta-chip active">STJ Súm. 633</span>
+        <span class="meta-chip active">STF SV 3</span>
+        <span class="meta-chip active">STF SV 21</span>
+        <span class="meta-chip">3 Fases</span>
+        <span class="meta-chip">Reformatio in Pejus</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="toc-card">
+        <div class="toc-label">Índice</div>
+        <ul class="toc-list">
+          <li class="toc-item"><a href="#geral">     <span class="toc-num">00</span>Disposições Gerais<span class="toc-badge badge-teal">Art. 1º</span></a></li>
+          <li class="toc-item"><a href="#principios"><span class="toc-num">01</span>Princípios<span class="toc-badge badge-teal">Art. 2º</span></a></li>
+          <li class="toc-item"><a href="#partes">    <span class="toc-num">02</span>Partes &amp; Competência<span class="toc-badge badge-amber">Arts. 9–17</span></a></li>
+          <li class="toc-item"><a href="#impeded">   <span class="toc-num">03</span>Impedimento &amp; Suspeição<span class="toc-badge badge-red">Arts. 18–21</span></a></li>
+          <li class="toc-item"><a href="#forma">     <span class="toc-num">04</span>Forma, Tempo &amp; Lugar<span class="toc-badge badge-teal">Arts. 22–25</span></a></li>
+          <li class="toc-item"><a href="#fases">     <span class="toc-num">05</span>Fases do Processo<span class="toc-badge badge-blue">Arts. 5–47</span></a></li>
+          <li class="toc-item"><a href="#recurso">   <span class="toc-num">06</span>Recurso &amp; Revisão<span class="toc-badge badge-amber">Arts. 56–65</span></a></li>
+          <li class="toc-item"><a href="#motivacao"> <span class="toc-num">07</span>Motivação &amp; Extinção<span class="toc-badge badge-purple">Art. 50–52</span></a></li>
+          <li class="toc-item"><a href="#sintese">   <span class="toc-num">★</span>Quadro-Síntese de Prazos<span class="toc-badge badge-teal">Revisão</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-watermark">PAF</div>
+  </section>
+
+  <div class="main">
+
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navegação</div>
+        <ul class="sidebar-links" id="sidebarLinks">
+          <li><a href="#geral"      class="active"><span class="sidebar-dot"></span>Disposições Gerais</a></li>
+          <li><a href="#principios"              ><span class="sidebar-dot"></span>Princípios</a></li>
+          <li><a href="#partes"                  ><span class="sidebar-dot"></span>Partes &amp; Competência</a></li>
+          <li><a href="#impeded"                 ><span class="sidebar-dot"></span>Impedimento &amp; Suspeição</a></li>
+          <li><a href="#forma"                   ><span class="sidebar-dot"></span>Forma, Tempo e Lugar</a></li>
+          <li><a href="#fases"                   ><span class="sidebar-dot"></span>Fases do Processo</a></li>
+          <li><a href="#recurso"                 ><span class="sidebar-dot"></span>Recurso &amp; Revisão</a></li>
+          <li><a href="#motivacao"               ><span class="sidebar-dot"></span>Motivação &amp; Extinção</a></li>
+          <li><a href="#sintese"                 ><span class="sidebar-dot"></span>Síntese de Prazos</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Jurisprudência</div>
+        <ul class="sidebar-links">
+          <li><a href="#stj633"><span class="sidebar-dot"></span>STJ Súm. 633</a></li>
+          <li><a href="#sv3"   ><span class="sidebar-dot"></span>STF SV 3 — TCU</a></li>
+          <li><a href="#sv21"  ><span class="sidebar-dot"></span>STF SV 21 — Caução</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Pontos Críticos</div>
+        <ul class="sidebar-links">
+          <li><a href="#delegacao"  ><span class="sidebar-dot" style="background:var(--acc)"></span>Delegação vs. Avocação</a></li>
+          <li><a href="#prazos-tab" ><span class="sidebar-dot" style="background:var(--amber)"></span>Tabela de Prazos</a></li>
+          <li><a href="#parecer"    ><span class="sidebar-dot" style="background:var(--purple)"></span>Parecer vinculante</a></li>
+          <li><a href="#reformatio" ><span class="sidebar-dot" style="background:var(--red)"></span>Reformatio in pejus</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="content">
+
+      <!-- ═══════════════════════════════
+           00 — DISPOSIÇÕES GERAIS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="geral" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>00</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Art. 1º</div>
+            <div class="chapter-title">Disposições Gerais &amp; Abrangência</div>
+          </div>
+        </div>
+
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Abrangência</div>
+          <p>Aplicável a <strong>TODOS os Poderes da UNIÃO</strong> — Administração Direta e Indireta — MPU e TCU — no <strong>desempenho da função administrativa</strong>.</p>
+        </div>
+
+        <div class="jur-box reveal" id="stj633">
+          <div class="jur-head"><span class="jur-icon">⚡</span><span class="jur-case">STJ · Súmula 633</span><div class="jur-divider"></div></div>
+          <p>A Lei 9.784/1999 pode ser aplicada, especialmente no que diz respeito ao <strong>prazo decadencial para revisão de atos adm.</strong>, de forma <strong>SUBSIDIÁRIA em TODAS as esferas</strong> da Federação se ausente lei própria regulando o processo administrativo no âmbito local.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           01 — PRINCÍPIOS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="principios" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>01</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Art. 2º — Rol Exemplificativo</div>
+            <div class="chapter-title">Princípios do PAF</div>
+          </div>
+        </div>
+
+        <table class="princ-table reveal">
+          <thead><tr><th>Princípio(s)</th><th>Critério / Conteúdo</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Impessoalidade<br>Indisponibilidade do IP</td>
+              <td>Atendimento a fins de interesse geral, <b>VEDADA</b> a renúncia <em>total ou parcial</em> de poderes ou competências, <b>SALVO</b> autorização em lei.</td>
+            </tr>
+            <tr>
+              <td>Publicidade</td>
+              <td>Divulgação <b>oficial</b> dos atos adm., <b>RESSALVADAS</b> as hipóteses de sigilo. <span class="warn">OBS: publicidade é condição de EFICÁCIA — não de validade.</span></td>
+            </tr>
+            <tr>
+              <td>Razoabilidade<br>Proporcionalidade</td>
+              <td><b>Adequação</b> entre meios e fins, <b>VEDADA</b> a imposição de obrigações, restrições e sanções em medida superior àquelas estritamente necessárias ao atendimento do interesse público.</td>
+            </tr>
+            <tr>
+              <td>Motivação</td>
+              <td><b>INDICAÇÃO</b> dos pressupostos de <b>fato e de direito</b> que determinarem a decisão.</td>
+            </tr>
+            <tr>
+              <td>Segurança Jurídica<br>Informalismo</td>
+              <td>Observância das formalidades <b>ESSENCIAIS</b>. Adoção de <b>FORMAS SIMPLES</b>, suficientes para propiciar adequado grau de certeza, segurança e respeito aos direitos dos administrados.</td>
+            </tr>
+            <tr>
+              <td>Ampla Defesa<br>Contraditório</td>
+              <td>Garantia dos direitos à <b>comunicação</b>, à <b>apresentação de alegações finais</b>, à <b>produção de provas</b> e à <b>interposição de recursos</b>.</td>
+            </tr>
+            <tr>
+              <td>Gratuidade</td>
+              <td><b class="bad">PROIBIÇÃO</b> de cobrança de despesas processuais (sucumbência) ou honorários advocatícios, <b>SALVO as previstas em LEI</b>.</td>
+            </tr>
+            <tr>
+              <td>Oficialidade</td>
+              <td>Instauração e <b>impulsão, de ofício</b>, do processo administrativo, sem prejuízo da atuação dos interessados. <em>(Nos judiciais, a regra é que as partes impulsionem.)</em></td>
+            </tr>
+            <tr>
+              <td>Impessoalidade<br>Segurança Jurídica</td>
+              <td>Interpretação da norma adm. da forma que <b>melhor garanta o atendimento do fim público</b>, <b class="bad">VEDADA retroatividade</b> de nova <b>INTERPRETAÇÃO</b>.</td>
+            </tr>
+            <tr>
+              <td>Verdade Material</td>
+              <td>Busca pela <b>realidade dos fatos</b>, além do que está nos autos; permite a <b>produção de provas pela própria ADM</b>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="jur-box jur-stf reveal" id="sv3">
+          <div class="jur-head"><span class="jur-icon">⚖</span><span class="jur-case">STF · SV 3 — Contraditório no TCU</span><div class="jur-divider"></div></div>
+          <p>Nos processos perante o TCU asseguram-se o contraditório e a ampla defesa quando da decisão puder resultar <strong>anulação ou revogação de ato adm. que beneficie o interessado</strong>, <strong>excetuada</strong> a apreciação da legalidade do ato de <strong>concessão INICIAL</strong> de aposentadoria, reforma e pensão.</p>
+        </div>
+        <div class="jur-box jur-stf reveal" id="sv21">
+          <div class="jur-head"><span class="jur-icon">⚖</span><span class="jur-case">STF · SV 21 — Gratuidade Recursal</span><div class="jur-divider"></div></div>
+          <p>É <strong>inconstitucional</strong> a exigência de <strong>depósito ou arrolamento prévio</strong> para a admissibilidade de <strong>recurso administrativo</strong>.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           02 — PARTES & COMPETÊNCIA
+      ═══════════════════════════════ -->
+      <div class="chapter" id="partes" style="--chapter-color:var(--amber)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>02</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 9 ao 17</div>
+            <div class="chapter-title">Partes, Interessados &amp; Competência</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Direitos &amp; Deveres dos Administrados</h3>
+        <div class="dual-grid reveal">
+          <div class="dual-card dc-teal">
+            <div class="dual-title">✓ Direitos (rol exemplificativo)</div>
+            <div class="dual-item">Ter <b>ciência da tramitação</b>, vista dos autos e cópias de documentos.</div>
+            <div class="dual-item">Formular alegações e apresentar documentos <b>ANTES da decisão</b> — contraditório.</div>
+            <div class="dual-item">Fazer-se assistir, <b>FACULTATIVAMENTE</b>, por advogado — <span style="color:var(--amber)">SALVO representação obrigatória (LEI)</span>.</div>
+          </div>
+          <div class="dual-card dc-amber">
+            <div class="dual-title">⚠ Deveres (rol exemplificativo)</div>
+            <div class="dual-item">Expor os fatos <b>conforme a verdade</b>.</div>
+            <div class="dual-item">Proceder com <b>lealdade, urbanidade e boa-fé</b>.</div>
+            <div class="dual-item">Não agir de modo <b>temerário</b>.</div>
+            <div class="dual-item">Prestar informações solicitadas e colaborar para o <b>esclarecimento dos fatos</b>.</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Interessados no Processo (Arts. 9–10)</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Categoria</th><th>Definição</th></tr></thead>
+          <tbody>
+            <tr><td>PF ou PJ — iniciadores</td><td><b>Titulares</b> de direitos ou interesses individuais; no exercício do <b>direito de representação</b>.</td></tr>
+            <tr><td>Terceiros Interessados</td><td>Sem terem iniciado o processo, têm direitos ou interesses que <b>possam ser afetados pela decisão</b>.</td></tr>
+            <tr><td>Organizações e Associações</td><td>No tocante a <b>direitos e interesses coletivos</b>.</td></tr>
+            <tr><td>Pessoas / Associações legalmente constituídas</td><td>Quanto a direitos ou interesses <b>DIFUSOS</b>.</td></tr>
+            <tr><td>Capacidade</td><td><b>≥ 18 anos</b>, ressalvada previsão especial em ato normativo próprio.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal" id="delegacao"><span class="h3-bar"></span>Delegação vs. Avocação</h3>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Regra Geral — Competência</div>
+          <p>A competência é <strong>IRRENUNCIÁVEL</strong>. Delegação, avocação e respectivas revogações <strong>devem ser publicadas</strong>.</p>
+        </div>
+        <div class="compare reveal">
+          <div class="cmp-card">
+            <div class="cmp-title">Delegação</div>
+            <div class="cmp-row">Pode delegar <b>PARTE</b> da competência a outros.</div>
+            <div class="cmp-row"><b class="ok">NÃO precisa</b> de hierarquia — pode delegar a quem não seja hierarquicamente subordinado.</div>
+            <div class="cmp-row">Quando for <b>conveniente</b>, em razão de circunstâncias técnicas, sociais, econômicas, jurídicas ou territoriais.</div>
+            <div class="cmp-row">Ato de delegação é <b>revogável a qualquer tempo</b>.</div>
+            <div class="cmp-row">Decisões por delegação são consideradas editadas pelo <b>DELEGADO</b>.</div>
+          </div>
+          <div class="cmp-card">
+            <div class="cmp-title">Avocação</div>
+            <div class="cmp-row">Caráter <b>EXCEPCIONAL</b> e por <b>motivos relevantes devidamente justificados</b>.</div>
+            <div class="cmp-row"><b class="bad">DEVE</b> haver hierarquia — somente de órgão hierarquicamente inferior.</div>
+            <div class="cmp-row">Apenas <b>TEMPORÁRIA</b>.</div>
+            <div class="cmp-row"><b class="bad">NÃO pode</b> ser avocada atribuição expressamente dada por lei a órgão/agente.</div>
+          </div>
+        </div>
+
+        <div class="callout c-red reveal">
+          <div class="callout-head">NÃO Podem Ser Objeto de Delegação</div>
+          <p>① Edição de atos de <strong>caráter normativo</strong> · ② Decisão de <strong>RECURSOS administrativos</strong> · ③ Matérias de <strong>competência EXCLUSIVA</strong> do órgão ou autoridade.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           03 — IMPEDIMENTO & SUSPEIÇÃO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="impeded" style="--chapter-color:var(--red)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>03</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 18 ao 21</div>
+            <div class="chapter-title">Impedimento &amp; Suspeição</div>
+          </div>
+        </div>
+
+        <div class="dual-grid reveal">
+          <div class="dual-card dc-red">
+            <div class="dual-title">⚠ Impedimento — Situações Objetivas (Art. 18)</div>
+            <div class="dual-item">Tenha <b>INTERESSE direto ou indireto</b> na matéria.</div>
+            <div class="dual-item">Esteja <b>LITIGANDO</b> judicial ou adm. com o interessado ou respectivo cônjuge/companheiro.</div>
+            <div class="dual-item">Tenha participado como <b>perito, testemunha ou representante</b>, ou se tais situações ocorrem quanto ao cônjuge, companheiro ou parente e afins <b>até o 3º grau</b>. <span style="color:var(--txt3);font-style:italic;font-size:14px;display:block;margin-top:4px">Primo = parente de 4º grau — NÃO gera impedimento.</span></div>
+            <div class="dual-item">Art. 19: quem incorrer em impedimento <b>DEVE comunicar o fato</b> e abster-se de atuar. Omissão = <b class="bad">falta GRAVE</b> (efeitos disciplinares).</div>
+          </div>
+          <div class="dual-card dc-amber">
+            <div class="dual-title">⊘ Suspeição — Situações Subjetivas (Art. 20)</div>
+            <div class="dual-item"><b>Amizade íntima</b> ou <b>inimizade notória</b> com algum dos interessados ou respectivos cônjuges, companheiros, parentes e afins <b>até o 3º grau</b>.</div>
+            <div class="dual-item">Arguida pelo <b>próprio servidor</b> ou pelos <b>interessados</b>.</div>
+            <div class="dual-item">Art. 21: o <b>indeferimento</b> de alegação de suspeição poderá ser objeto de <b>recurso</b>, <b class="bad">SEM efeito suspensivo</b>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           04 — FORMA, TEMPO E LUGAR
+      ═══════════════════════════════ -->
+      <div class="chapter" id="forma" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>04</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 22 ao 25</div>
+            <div class="chapter-title">Forma, Tempo e Lugar dos Atos</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Forma</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Regras de Forma dos Atos</div></div>
+          <div class="flow-row"><div class="flow-index">①</div><div class="flow-body">Atos <b>NÃO dependem de forma determinada</b>, SENÃO quando a lei expressamente a exigir.</div></div>
+          <div class="flow-row"><div class="flow-index">②</div><div class="flow-body">Forma regra: <b>ESCRITO</b> (oral quando admitido), em vernáculo, com data, local e assinatura da autoridade.</div></div>
+          <div class="flow-row"><div class="flow-index">③</div><div class="flow-body">Reconhecimento de firma <b>SÓ será exigido</b> quando houver <b>dúvida de autenticidade</b> — SALVO imposição legal.</div></div>
+          <div class="flow-row"><div class="flow-index">④</div><div class="flow-body">A <b>autenticação de cópias</b> poderá ser feita pelo próprio órgão administrativo.</div></div>
+          <div class="flow-row flow-note"><div class="flow-index">⑤</div><div class="flow-body">O processo adm. deverá ter suas páginas <b>numeradas sequencialmente e rubricadas</b>.</div></div>
+        </div>
+
+        <h3 class="reveal" id="prazos-tab"><span class="h3-bar"></span>Prazos e Contagem</h3>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Regra Supletiva — Prazo dos Atos</div>
+          <p>Inexistindo disposição específica, os atos devem ser praticados no prazo de <strong>5 + 5 dias</strong>, SALVO força maior (=NCPC).</p>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Aspecto</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Quando</td><td>Em <b>DIAS ÚTEIS</b>, no <b>horário normal</b> da repartição. Atos já iniciados podem ser concluídos fora do horário normal se o adiamento causar danos.</td></tr>
+            <tr><td>Início da contagem</td><td>A partir da data da <b>cientificação oficial</b> — <b class="bad">EXCLUINDO</b> o dia do começo, <b class="ok">INCLUINDO</b> o do vencimento.</td></tr>
+            <tr><td>Suspensão</td><td>SALVO força maior comprovada, os prazos processuais <b class="bad">NÃO se suspendem</b>.</td></tr>
+            <tr><td>Dias</td><td>Modo <b>CONTÍNUO</b> (dias úteis e não úteis). Se vencimento = dia não-útil, dar-se-á no <b>próximo dia útil</b>.</td></tr>
+            <tr><td>Meses</td><td>De data a data. Se no mês do vencimento não houver equivalente, o termo é o <b>último dia do mês</b>.</td></tr>
+            <tr><td>Ano</td><td>De data a data.</td></tr>
+            <tr><td>Lugar</td><td><b>PREFERENCIALMENTE</b> na sede do órgão, cientificando-se o interessado se outro for o local.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Comunicação dos Atos — Arts. 26–28</h3>
+        <div class="callout c-amber reveal">
+          <div class="callout-head">Intimação — Prazo Mínimo</div>
+          <p>A intimação deve ser feita no <strong>mínimo 3 dias ÚTEIS ANTES</strong> do comparecimento.</p>
+        </div>
+        <div class="dual-grid reveal">
+          <div class="dual-card dc-teal">
+            <div class="dual-title">Formalidades da Intimação</div>
+            <div class="dual-item">Identificação do intimado</div>
+            <div class="dual-item">Nome do órgão ou entidade</div>
+            <div class="dual-item">Finalidade da intimação</div>
+            <div class="dual-item">Data, hora e <b>local</b> para comparecer</div>
+            <div class="dual-item">Se deve ir pessoalmente ou poderá ser representado</div>
+            <div class="dual-item">Indicação dos <b>fatos e fundamentos legais</b></div>
+            <div class="dual-item">Info. da continuidade do PADM, <b>independente de comparecimento</b></div>
+          </div>
+          <div class="dual-card dc-blue">
+            <div class="dual-title">Meios de Intimação</div>
+            <div class="dual-item"><b>Via postal com AR</b></div>
+            <div class="dual-item"><b>Telegrama</b></div>
+            <div class="dual-item"><b>Pessoal</b> — interessado comparece</div>
+            <div class="dual-item"><b>Publicação Oficial</b> — interessado indeterminado, desconhecido ou com domicílio indefinido</div>
+            <div class="dual-item"><b>Outros meios</b> que garantam ciência</div>
+          </div>
+        </div>
+        <div class="callout c-red reveal">
+          <div class="callout-head">Nulidade &amp; Revelia</div>
+          <p>Intimações <strong>NULAS</strong> quando feitas sem observância das prescrições legais, <strong>MAS</strong> o <strong>comparecimento</strong> do administrado supre sua falta ou irregularidade (= NCPC).</p>
+          <p>Revelia: o desatendimento da intimação <strong>NÃO importa</strong> o reconhecimento da verdade dos fatos, <strong>NEM</strong> a renúncia a direito pelo administrado. <strong>Cuidado:</strong> deixar de constituir advogado ≠ revelia.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           05 — FASES DO PROCESSO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="fases" style="--chapter-color:var(--blue)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>05</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 5º ao 47</div>
+            <div class="chapter-title">Fases do Processo Administrativo</div>
+          </div>
+        </div>
+
+        <!-- Macrofluxo -->
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Fluxo Completo — Processo Administrativo Federal</div></div>
+          <div class="flow-row"><div class="flow-index">1</div><div class="flow-body"><b>INSTAURAÇÃO</b> — de ofício ou a pedido do interessado</div><div class="flow-tag">Art. 5</div></div>
+          <div class="flow-row"><div class="flow-index">2</div><div class="flow-body"><b>INSTRUÇÃO</b> — averiguação e comprovação de dados<div style="font-size:13px;color:var(--txt3);margin-top:4px;font-style:italic">10d para interessado se manifestar após ciência</div></div><div class="flow-tag">Arts. 29–47</div></div>
+          <div class="flow-row flow-note"><div class="flow-index">3</div><div class="flow-body"><b>DECISÃO</b> — ADM tem 30d + 30d para decidir após conclusão da instrução</div><div class="flow-tag">Art. 48–49</div></div>
+          <div class="flow-row flow-special"><div class="flow-index">→</div><div class="flow-body"><b>Pedido de Reconsideração (5d)</b> — se NÃO reconsiderar, encaminha à autoridade superior (RECURSO)</div><div class="flow-tag">5 dias</div></div>
+          <div class="flow-row"><div class="flow-index">4</div><div class="flow-body"><b>RECURSO</b> — 10d para interpor, contados da ciência ou divulgação oficial; órgão tem 5d para intimar demais interessados</div><div class="flow-tag">Arts. 56–64</div></div>
+          <div class="flow-row"><div class="flow-index">5</div><div class="flow-body"><b>INSTRUÇÃO DO RECURSO</b> + nova <b>DECISÃO</b> (30d + 30d)</div><div class="flow-tag"></div></div>
+          <div class="flow-row flow-pass"><div class="flow-index">★</div><div class="flow-body"><b>REVISÃO</b> — a qualquer tempo, por fatos novos; sem reformatio in pejus</div><div class="flow-tag">Art. 65</div></div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Instauração (Arts. 5–8)</h3>
+        <div class="callout c-blue reveal">
+          <div class="callout-head">Início do Processo</div>
+          <p>De <strong>OFÍCIO</strong> ou a <strong>PEDIDO de INTERESSADO</strong>. Inexistindo competência legal específica, deverá ser iniciado perante a autoridade de <strong>MENOR grau hierárquico</strong> para decidir.</p>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Aspecto</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Pluralidade de interessados idênticos</td><td>PODERÁ ser formulado um <b>ÚNICO requerimento</b> (petição), SALVO preceito legal em contrário.</td></tr>
+            <tr><td>Requerimento</td><td><b>ESCRITO</b>, SALVO admitida solicitação ORAL. ADM: <b class="bad">VEDADA</b> a recusa imotivada de recebimento de documentos — DEVENDO o servidor orientar o interessado.</td></tr>
+            <tr><td>Formalidades do requerimento</td><td>① Órgão/autoridade a que se dirige · ② Identificação do interessado ou representante · ③ Domicílio ou local para comunicações · ④ Formulação do pedido com fatos e fundamentos · ⑤ Data e assinatura.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Instrução — Participação Social &amp; Provas (Arts. 29–47)</h3>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Regras Gerais da Instrução</div>
+          <p>De ofício ou mediante impulsão do órgão, sem prejuízo do direito dos interessados de propô-las. Os atos de instrução que exijam atuação dos interessados devem realizar-se do <strong>modo menos oneroso</strong>. São <strong>INADMISSÍVEIS</strong> as provas obtidas por meios ilícitos.</p>
+        </div>
+        <table class="data-table reveal">
+          <thead><tr><th>Mecanismo</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td>Consulta Pública</td><td>Em matérias de interesse GERAL, por <b>despacho motivado</b>, ANTES da decisão — comparecimento <b class="bad">NÃO confere</b> condição de interessado, MAS confere <b>direito de resposta fundamentada</b>.</td></tr>
+            <tr><td>Audiência Pública</td><td>A juízo da autoridade, para <b>DEBATES orais</b> — <b>não confundir</b> com Consulta Pública (escrita).</td></tr>
+            <tr><td>Audiência de outros órgãos</td><td>Reunião conjunta, lavrando-se <b>ata</b> a ser juntada aos autos.</td></tr>
+            <tr><td>Ônus da Prova</td><td>Cabe ao <b>INTERESSADO</b> provar os fatos que alegou, sem prejuízo do dever de instrução de ofício do órgão.</td></tr>
+            <tr><td>Recusa de Provas</td><td>Decisão <b>fundamentada</b>, quando ilícitas, impertinentes, desnecessárias ou <b>protelatórias</b>.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal" id="parecer"><span class="h3-bar"></span>Parecer Obrigatório &amp; Laudos Técnicos</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Parecer Obrigatório Não Emitido no Prazo (máx. 15 dias)</div></div>
+          <div class="flow-row flow-pass"><div class="flow-index">↓</div><div class="flow-body">Parecer obrigatório <b>NÃO VINCULANTE</b> — processo <b>PROSSEGUE</b>, decisão pode ser tomada com sua <b>dispensa</b>. Responsabiliza quem se omitiu.</div></div>
+          <div class="flow-row flow-fail"><div class="flow-index">✗</div><div class="flow-body">Parecer obrigatório <b>VINCULANTE</b> — processo <b>NÃO TERÁ SEGUIMENTO</b> até a apresentação. Responsabiliza quem der causa ao atraso.</div></div>
+        </div>
+        <div class="callout c-purple reveal">
+          <div class="callout-head">Laudos Técnicos — Prazo Descumprido</div>
+          <p>Se órgão não cumprir o encargo no prazo, o órgão responsável pela instrução deverá solicitar laudo técnico de <strong>OUTRO órgão</strong> dotado de qualificação e capacidade técnica equivalentes.</p>
+        </div>
+        <div class="callout c-amber reveal">
+          <div class="callout-head">Poder Geral de Cautela da Adm. Pública</div>
+          <p>Em caso de <strong>risco iminente</strong>, a Adm. Pública poderá <strong>motivadamente</strong> adotar providências acauteladoras <strong>SEM a prévia manifestação do interessado</strong>.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           06 — RECURSO & REVISÃO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="recurso" style="--chapter-color:var(--amber)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>06</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 56 ao 65</div>
+            <div class="chapter-title">Recurso &amp; Revisão</div>
+          </div>
+        </div>
+
+        <div class="prazo-grid reveal">
+          <div class="prazo-chip pc-amber"><div class="prazo-num">5d</div><div class="prazo-unit">Reconsideração</div><div class="prazo-desc">Prazo para a autoridade reconsiderar antes de encaminhar</div></div>
+          <div class="prazo-chip pc-blue"><div class="prazo-num">10d</div><div class="prazo-unit">Recurso</div><div class="prazo-desc">Prazo para interpor, da ciência ou divulgação oficial</div></div>
+          <div class="prazo-chip pc-teal"><div class="prazo-num">5d</div><div class="prazo-unit">Intimação</div><div class="prazo-desc">Órgão intima demais interessados para alegações</div></div>
+          <div class="prazo-chip pc-purple"><div class="prazo-num">3</div><div class="prazo-unit">Instâncias máx.</div><div class="prazo-desc">Salvo disposição legal diversa</div></div>
+          <div class="prazo-chip pc-green"><div class="prazo-num">30+30d</div><div class="prazo-unit">Decisão</div><div class="prazo-desc">Após conclusão da instrução (1ª e 2ª instância)</div></div>
+        </div>
+
+        <table class="data-table reveal">
+          <thead><tr><th>Aspecto</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Fundamentos</td><td>Razões de <b>LEGALIDADE</b> e de <b>MÉRITO</b>. Interposição independe de caução (gratuidade), salvo exigência legal.</td></tr>
+            <tr><td>Legitimados</td><td>Titulares · Terceiros afetados · Organizações/associações (coletivos) · Cidadãos/associações (difusos).</td></tr>
+            <tr><td>Efeito suspensivo</td><td><b class="bad">EM REGRA: NÃO tem efeito suspensivo</b> — tem efeito <b>devolutivo</b>. Exceção: justo receio de prejuízo de difícil reparação → autoridade recorrida ou imediatamente superior poderá dar efeito suspensivo, de ofício ou a pedido.</td></tr>
+            <tr><td>Não conhecimento</td><td>Fora do prazo · perante órgão incompetente (→ devolve prazo) · por quem não seja legitimado · esfera adm. exaurida. Não conhecimento <b class="ok">NÃO impede</b> a ADM de rever de ofício ato ilegal (sem preclusão).</td></tr>
+            <tr><td>Decisão do recurso</td><td>CONFIRMAR · MODIFICAR · ANULAR · REVOGAR — total ou parcialmente.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout c-red reveal" id="reformatio">
+          <div class="callout-head">Reformatio in Pejus — Recurso vs. Revisão</div>
+          <p><strong>Recurso (Art. 64):</strong> PODE haver reformatio in pejus. Se a decisão recorrida puder decorrer gravame ao recorrente, este deverá ser <strong>cientificado para formular alegações ANTES da decisão</strong>.</p>
+          <p><strong>Revisão (Art. 65):</strong> Da revisão <strong>NÃO PODERÁ</strong> resultar agravamento da sanção — <strong>NÃO há reformatio in pejus</strong>.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Súmulas Vinculantes no Recurso</h3>
+        <div class="callout c-gold reveal">
+          <div class="callout-head">Alegação de Contrário a SV</div>
+          <p>Se o recorrente alegar que a decisão contraria SV, caberá à autoridade prolatora, se não reconsiderar, explicitar <strong>ANTES de encaminhar o recurso</strong> à autoridade superior, as razões da <strong>aplicabilidade ou inaplicabilidade</strong> da SV, conforme o caso.</p>
+        </div>
+        <div class="callout c-purple reveal">
+          <div class="callout-head">Reclamação (Lei 11.417, Art. 7º §1º)</div>
+          <p>Contra omissão ou ato da Adm. Pública, uso SÓ será admitido <strong>APÓS esgotamento das vias administrativas</strong>. Procedente: STF anulará o ato e exigirá adequação de futuras decisões, sob pena de <strong>responsabilização pessoal nas esferas cível, adm. e penal</strong>.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Revisão (Art. 65)</h3>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Revisão de Sanções</div>
+          <p>Processos que resultem <strong>SANÇÕES</strong> poderão ser revistos <strong>a qualquer tempo</strong>, a pedido ou de ofício, quando surgirem <strong>FATOS NOVOS ou CIRCUNSTÂNCIAS RELEVANTES</strong> que justificam a inadequação da sanção aplicada. <strong>Sem reformatio in pejus.</strong></p>
+          <p>Art. 68 — Sanções: terão natureza <strong>PECUNIÁRIA</strong> ou <strong>OBRIGAÇÃO</strong> de fazer ou de não fazer.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           07 — MOTIVAÇÃO & EXTINÇÃO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="motivacao" style="--chapter-color:var(--purple)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>07</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Arts. 50, 51, 52, 69-A</div>
+            <div class="chapter-title">Motivação, Extinção &amp; Preferência</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Motivação Obrigatória (Art. 50)</h3>
+        <div class="checklist reveal">
+          <div class="check-item"><span class="check-icon">§</span>Neguem, limitem ou afetem <b>direitos ou interesses</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Imponham ou agravem <b>deveres, encargos ou sanções</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Decidam processo adm. de <b>concurso ou seleção pública</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Dispensem ou declarem a <b>inexigibilidade de processo licitatório</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Decidam <b>recursos administrativos</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Decorram de <b>reexame de ofício</b>.</div>
+          <div class="check-item"><span class="check-icon">§</span>Deixem de aplicar <b>jurisprudência</b> ou discrepem de pareceres, laudos, propostas e relatórios.</div>
+          <div class="check-item"><span class="check-icon">§</span>Importem <b>anulação, revogação, suspensão ou convalidação</b> de ato adm. — discricionários <b>ou vinculados</b>.</div>
+        </div>
+        <div class="callout c-gold reveal">
+          <div class="callout-head">Motivação por Reprodução Mecânica — "Ctrl C + Ctrl V"</div>
+          <p>Na solução de vários assuntos da <strong>mesma natureza</strong>, PODE ser utilizado meio mecânico que reproduza os fundamentos das decisões, <strong>DESDE QUE não prejudique direito ou garantia dos interessados</strong>.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Desistência &amp; Extinção (Arts. 51 e 52)</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Situação</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Desistência / Renúncia</td><td>INTERESSADO poderá, mediante <b>manifestação escrita</b>, desistir total ou parcialmente do pedido ou renunciar a direitos disponíveis. Vários interessados: atinge <b>somente quem a tenha formulado</b>.</td></tr>
+            <tr><td>Desistência e interesse público</td><td><b class="bad">NÃO prejudica o prosseguimento</b> do processo, se ADM considerar que o <b>interesse público</b> assim o exige.</td></tr>
+            <tr><td>Extinção</td><td>Órgão competente pode declarar extinto quando: ① exaurida sua finalidade; ② objeto tornar-se <b>impossível, inútil ou prejudicado</b> por fato superveniente.</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Preferência na Tramitação (Art. 69-A)</h3>
+        <div class="callout c-green reveal">
+          <div class="callout-head">Prioridade em Qualquer Órgão ou Instância</div>
+          <p>Terão prioridade os procedimentos adm. em que figure como parte ou interessado (deve fazer <strong>prova de sua condição</strong>):</p>
+          <p>① Idade <strong>&gt; 60 anos</strong> · ② Portador de <strong>deficiência física ou mental</strong> · ③ Portador de <strong>doença grave</strong>, mesmo que contraída <strong>APÓS o início do processo</strong>.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           SÍNTESE DE PRAZOS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="sintese" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>★</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Revisão Completa</div>
+            <div class="chapter-title">Quadro-Síntese de Prazos e Regras Chave</div>
+          </div>
+        </div>
+
+        <table class="princ-table reveal">
+          <thead><tr><th>Evento / Instituto</th><th>Prazo / Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Prazo supletivo dos atos (sem disposição específica)</td><td><b>5 + 5 dias</b> (salvo força maior) — igual ao NCPC</td></tr>
+            <tr><td>Antecedência mínima de intimação</td><td><b>3 dias úteis</b> antes do comparecimento</td></tr>
+            <tr><td>Parecer de órgão consultivo obrigatório</td><td>Máx. <b>15 dias</b>, salvo norma especial</td></tr>
+            <tr><td>Pedido de reconsideração</td><td><b>5 dias</b> para a autoridade reconsiderar ou encaminhar</td></tr>
+            <tr><td>Prazo para interpor recurso</td><td><b>10 dias</b> da ciência ou divulgação oficial</td></tr>
+            <tr><td>Intimação de demais interessados no recurso</td><td><b>5 dias</b> para apresentar alegações</td></tr>
+            <tr><td>Prazo para manifestação do interessado (instrução)</td><td><b>10 dias</b> após ciência</td></tr>
+            <tr><td>Decisão após instrução</td><td><b>30 dias + 30 dias</b> (prorrogação)</td></tr>
+            <tr><td>Instâncias administrativas</td><td>Máx. <b>3 instâncias</b>, salvo lei diversa</td></tr>
+            <tr><td>Efeito do recurso (regra)</td><td><b>Devolutivo</b> — NÃO tem efeito suspensivo automático</td></tr>
+            <tr><td>Reformatio in pejus — Recurso</td><td><b>PODE</b> haver — recorrente deve ser previamente cientificado</td></tr>
+            <tr><td>Reformatio in pejus — Revisão</td><td><b class="bad">NÃO pode</b> resultar agravamento da sanção</td></tr>
+            <tr><td>Revisão de sanções</td><td><b>A qualquer tempo</b>, por fatos novos ou circunstâncias relevantes</td></tr>
+            <tr><td>Competência — regra</td><td><b>IRRENUNCIÁVEL</b>; delegação e avocação devem ser publicadas</td></tr>
+            <tr><td>Delegação sem hierarquia</td><td><b class="ok">POSSÍVEL</b> — pode delegar a quem não seja hierarquicamente subordinado</td></tr>
+            <tr><td>Avocação sem hierarquia</td><td><b class="bad">IMPOSSÍVEL</b> — deve haver hierarquia (órgão inferior)</td></tr>
+            <tr><td>Publicidade — condição</td><td>Condição de <b>EFICÁCIA</b>, não de validade</td></tr>
+            <tr><td>Omissão de dever de comunicar impedimento</td><td><b>Falta GRAVE</b> para efeitos disciplinares</td></tr>
+            <tr><td>Indeferimento de suspeição</td><td>Objeto de recurso, <b>SEM efeito suspensivo</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:60px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;" class="reveal">
+        <div style="font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)">Lei 9.784/99 · Codex Legislativo · 2026</div>
+        <a href="legislacao_home.html" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);text-decoration:none;display:flex;align-items:center;gap:8px;transition:opacity .2s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">← Voltar ao Codex</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.dual-card,.cmp-card,.check-item,.flow-row,td,th,.prazo-chip').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='50px';ring.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px';});
+});
+const pb=document.getElementById('progress');
+document.addEventListener('scroll',()=>{pb.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.transitionDelay=(i%5)*.07+'s';e.target.classList.add('visible');}});
+},{threshold:.08});
+reveals.forEach(el=>io.observe(el));
+const sections=document.querySelectorAll('.chapter');
+const sideLinks=document.querySelectorAll('#sidebarLinks a');
+document.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  sideLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>
