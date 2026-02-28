@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LC 95/98 — Codex Legislativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #09090B;
+  --bg2:         #0F0F12;
+  --bg3:         #141418;
+  --border:      #222228;
+  --border2:     #2C2C36;
+  --acc:         #3B82F6;
+  --acc-soft:    #93C5FD;
+  --acc-dim:     #071228;
+  --acc-glow:    rgba(59,130,246,.10);
+  --gold:        #C9A84C;
+  --gold-dim:    #2A2010;
+  --gold-soft:   #E8C97A;
+  --amber:       #F59E0B;
+  --amber-dim:   #271A00;
+  --red:         #E05252;
+  --red-dim:     #210A0A;
+  --teal:        #2DD4BF;
+  --teal-dim:    #041A18;
+  --purple:      #A855F7;
+  --purple-dim:  #1A0A2E;
+  --green:       #22C55E;
+  --green-dim:   #071A0F;
+  --orange:      #F97316;
+  --orange-dim:  #1F0D00;
+  --txt:         #D4D4D8;
+  --txt2:        #71717A;
+  --txt3:        #3F3F46;
+  --white:       #FAFAFA;
+  --ff-disp:     'Syne', sans-serif;
+  --ff-body:     'Cormorant Garamond', serif;
+  --ff-mono:     'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--txt); font-family:var(--ff-body); font-size:18px; line-height:1.7; cursor:none; }
+
+.cursor      { position:fixed; width:10px; height:10px; background:var(--acc); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:difference; }
+.cursor-ring { position:fixed; width:36px; height:36px; border:1px solid rgba(59,130,246,.4); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+
+body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px), repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px); }
+body::after  { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(ellipse 70% 40% at 50% -5%, rgba(59,130,246,.06), transparent 65%); }
+.page { position:relative; z-index:1; }
+
+.progress-bar { position:fixed; top:0; left:0; z-index:300; height:2px; background:var(--acc); width:0%; transition:width .1s linear; box-shadow:0 0 10px var(--acc); }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:18px 48px; border-bottom:1px solid var(--border); background:rgba(9,9,11,.88); backdrop-filter:blur(20px); }
+.nav-back { font-family:var(--ff-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--txt2); text-decoration:none; display:flex; align-items:center; gap:10px; transition:color .2s; }
+.nav-back:hover { color:var(--acc); }
+.nav-back::before { content:'←'; font-size:14px; }
+.nav-logo { font-family:var(--ff-mono); font-size:12px; letter-spacing:.22em; color:var(--acc); text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.nav-logo::before { content:'§'; font-size:18px; font-family:var(--ff-body); }
+.nav-toc { display:flex; gap:22px; list-style:none; }
+.nav-toc a { font-family:var(--ff-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--txt3); text-decoration:none; transition:color .2s; }
+.nav-toc a:hover { color:var(--acc); }
+
+/* HERO */
+.hero { min-height:92vh; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:140px 48px 80px; gap:80px; position:relative; overflow:hidden; }
+.hero-watermark { position:absolute; right:-30px; bottom:-60px; font-family:var(--ff-disp); font-size:clamp(90px,14vw,220px); font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(59,130,246,.05); letter-spacing:-0.04em; line-height:1; user-select:none; pointer-events:none; white-space:nowrap; }
+.hero-left { animation:fadeUp .8s ease both; }
+.hero-eyebrow { font-family:var(--ff-mono); font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--acc); margin-bottom:20px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:''; display:block; width:36px; height:1px; background:var(--acc); }
+.hero h1 { font-family:var(--ff-disp); font-size:clamp(44px,5.5vw,78px); font-weight:800; line-height:.9; letter-spacing:-0.03em; color:var(--white); margin-bottom:28px; }
+.hero h1 .accent { color:var(--acc); }
+.hero-subtitle { font-family:var(--ff-body); font-size:20px; font-weight:300; font-style:italic; color:var(--txt2); margin-bottom:36px; line-height:1.6; max-width:440px; }
+.hero-meta { display:flex; flex-wrap:wrap; gap:10px; }
+.meta-chip { font-family:var(--ff-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; padding:6px 14px; border:1px solid var(--border2); color:var(--txt2); border-radius:2px; transition:border-color .2s,color .2s; cursor:none; }
+.meta-chip:hover { border-color:var(--acc); color:var(--acc); }
+.meta-chip.active { border-color:var(--acc); color:var(--acc); background:var(--acc-dim); }
+
+.hero-right { animation:fadeUp .8s .15s ease both; }
+.toc-card { border:1px solid var(--border2); border-top:2px solid var(--acc); background:var(--bg2); padding:32px; position:relative; overflow:hidden; }
+.toc-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--acc-glow), transparent); pointer-events:none; }
+.toc-label { font-family:var(--ff-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+.toc-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+.toc-list { list-style:none; display:flex; flex-direction:column; gap:2px; }
+.toc-item a { display:flex; align-items:center; gap:14px; padding:11px 14px; text-decoration:none; font-family:var(--ff-body); font-size:16px; color:var(--txt2); border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s,padding .2s; }
+.toc-item a:hover { color:var(--white); border-left-color:var(--acc); background:rgba(59,130,246,.06); padding-left:20px; }
+.toc-num { font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); min-width:28px; }
+.toc-badge { margin-left:auto; font-family:var(--ff-mono); font-size:9px; letter-spacing:.1em; padding:2px 8px; border-radius:2px; }
+.badge-blue   { background:var(--acc-dim);    color:var(--acc); }
+.badge-gold   { background:var(--gold-dim);   color:var(--gold); }
+.badge-amber  { background:var(--amber-dim);  color:var(--amber); }
+.badge-teal   { background:var(--teal-dim);   color:var(--teal); }
+.badge-purple { background:var(--purple-dim); color:var(--purple); }
+.badge-green  { background:var(--green-dim);  color:var(--green); }
+.badge-orange { background:var(--orange-dim); color:var(--orange); }
+
+/* MAIN */
+.main { display:grid; grid-template-columns:240px 1fr; max-width:1300px; margin:0 auto; padding:0 48px 120px; }
+
+/* SIDEBAR */
+.sidebar { position:sticky; top:72px; height:calc(100vh - 72px); overflow-y:auto; padding:48px 24px 48px 0; border-right:1px solid var(--border); scrollbar-width:thin; scrollbar-color:var(--border2) transparent; }
+.sidebar-section { margin-bottom:30px; }
+.sidebar-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:10px; padding-left:12px; }
+.sidebar-links { list-style:none; display:flex; flex-direction:column; gap:1px; }
+.sidebar-links a { display:flex; align-items:center; gap:10px; padding:8px 12px; font-family:var(--ff-body); font-size:15px; color:var(--txt3); text-decoration:none; border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s; }
+.sidebar-links a:hover { color:var(--txt); background:var(--bg3); }
+.sidebar-links a.active { color:var(--acc); border-left-color:var(--acc); background:var(--acc-dim); }
+.sidebar-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.5; flex-shrink:0; }
+
+/* CONTENT */
+.content { padding:48px 0 48px 56px; }
+
+/* CHAPTER */
+.chapter { margin-bottom:80px; scroll-margin-top:90px; }
+.chapter-head { display:flex; align-items:flex-start; gap:24px; margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid var(--border); position:relative; }
+.chapter-head::after { content:''; position:absolute; bottom:-1px; left:0; height:2px; width:60px; background:var(--chapter-color,var(--acc)); }
+.chapter-num-block { flex-shrink:0; width:52px; height:52px; border:1px solid var(--chapter-color,var(--acc)); display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.3); }
+.chapter-num-block span { font-family:var(--ff-mono); font-size:11px; font-weight:600; color:var(--chapter-color,var(--acc)); letter-spacing:.06em; }
+.chapter-eyebrow { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:6px; }
+.chapter-title { font-family:var(--ff-disp); font-size:clamp(20px,2.6vw,30px); font-weight:800; color:var(--white); letter-spacing:-0.02em; line-height:1.05; }
+
+h3 { font-family:var(--ff-disp); font-size:18px; font-weight:700; color:var(--white); letter-spacing:-0.01em; margin:32px 0 12px; display:flex; align-items:center; gap:10px; }
+h3 .h3-bar { display:block; width:22px; height:2px; background:var(--chapter-color,var(--acc)); flex-shrink:0; }
+
+/* ART BLOCK */
+.art-block { display:grid; grid-template-columns:72px 1fr; border:1px solid var(--border); margin:10px 0; overflow:hidden; background:var(--bg2); transition:border-color .25s; }
+.art-block:hover { border-color:var(--border2); }
+.art-id { background:var(--bg3); display:flex; flex-direction:column; align-items:center; justify-content:center; border-right:1px solid var(--border); padding:14px 6px; font-family:var(--ff-mono); font-size:10px; letter-spacing:.08em; color:var(--txt3); text-align:center; line-height:1.5; gap:3px; }
+.art-id strong { color:var(--acc-soft); font-size:15px; letter-spacing:0; font-weight:500; }
+.art-text { padding:14px 18px; font-family:var(--ff-body); font-size:16px; font-style:italic; color:var(--txt); line-height:1.7; }
+.art-text b { font-style:normal; color:var(--gold-soft); font-weight:600; }
+.art-text .kw  { font-style:normal; color:var(--acc-soft); font-weight:600; }
+.art-text .bad { font-style:normal; color:var(--red); font-weight:600; }
+.art-text .ok  { font-style:normal; color:var(--green); font-weight:600; }
+.art-text .warn { font-style:normal; color:var(--amber); font-weight:600; }
+
+/* CALLOUT */
+.callout { border-left:3px solid; padding:14px 18px; margin:12px 0; position:relative; overflow:hidden; }
+.callout::before { content:''; position:absolute; inset:0; background:currentColor; opacity:.04; }
+.callout-head { font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:500; margin-bottom:8px; }
+.callout p { font-family:var(--ff-body); font-size:16px; line-height:1.65; color:var(--txt); }
+.callout p + p { margin-top:8px; }
+.callout p b, .callout p strong { font-weight:600; }
+.c-blue   { border-color:var(--acc);    color:var(--acc);    background:var(--acc-dim); }
+.c-gold   { border-color:var(--gold);   color:var(--gold);   background:var(--gold-dim); }
+.c-amber  { border-color:var(--amber);  color:var(--amber);  background:var(--amber-dim); }
+.c-red    { border-color:var(--red);    color:var(--red);    background:var(--red-dim); }
+.c-teal   { border-color:var(--teal);   color:var(--teal);   background:var(--teal-dim); }
+.c-purple { border-color:var(--purple); color:var(--purple); background:var(--purple-dim); }
+.c-green  { border-color:var(--green);  color:var(--green);  background:var(--green-dim); }
+.c-orange { border-color:var(--orange); color:var(--orange); background:var(--orange-dim); }
+
+/* DATA TABLE */
+.data-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15.5px; }
+.data-table th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.data-table th:first-child { color:var(--acc); }
+.data-table td { padding:12px 14px; border:1px solid var(--border); vertical-align:top; color:var(--txt); background:var(--bg2); font-family:var(--ff-body); line-height:1.6; }
+.data-table td:first-child { font-family:var(--ff-mono); font-size:12px; color:var(--acc-soft); background:var(--bg3); }
+.data-table tr:hover td { background:rgba(59,130,246,.015); }
+.data-table td b { color:var(--gold-soft); font-weight:600; }
+.data-table td .bad  { color:var(--red);    font-weight:600; }
+.data-table td .ok   { color:var(--green);  font-weight:600; }
+.data-table td .warn { color:var(--amber);  font-weight:600; }
+
+/* FLOW */
+.flow { margin:16px 0; border:1px solid var(--border); }
+.flow-row { display:flex; align-items:stretch; border-bottom:1px solid var(--border); transition:background .15s; }
+.flow-row:last-child { border-bottom:none; }
+.flow-row:hover { background:rgba(255,255,255,.015); }
+.flow-row.flow-header  { background:#050C1A; border-bottom:1px solid rgba(59,130,246,.2); }
+.flow-row.flow-pass    { background:var(--green-dim); }
+.flow-row.flow-fail    { background:var(--red-dim); }
+.flow-row.flow-note    { background:var(--amber-dim); }
+.flow-row.flow-special { background:var(--purple-dim); }
+.flow-row.flow-blue    { background:var(--acc-dim); }
+.flow-index { width:52px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); }
+.flow-row.flow-header  .flow-index { color:var(--acc); }
+.flow-row.flow-pass    .flow-index { color:var(--green); }
+.flow-row.flow-fail    .flow-index { color:var(--red); }
+.flow-row.flow-note    .flow-index { color:var(--amber); }
+.flow-row.flow-special .flow-index { color:var(--purple); }
+.flow-row.flow-blue    .flow-index { color:var(--acc-soft); }
+.flow-body { padding:12px 18px; font-family:var(--ff-body); font-size:15.5px; color:var(--txt); line-height:1.55; flex:1; }
+.flow-row.flow-header  .flow-body { font-family:var(--ff-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc); font-weight:500; }
+.flow-row.flow-pass    .flow-body { color:var(--green); font-weight:600; }
+.flow-row.flow-fail    .flow-body { color:var(--red); font-weight:600; }
+.flow-row.flow-note    .flow-body { color:var(--amber); }
+.flow-row.flow-special .flow-body { color:var(--purple); }
+.flow-row.flow-blue    .flow-body { color:var(--acc-soft); }
+.flow-body b { color:var(--gold-soft); font-weight:600; }
+.flow-tag { flex-shrink:0; display:flex; align-items:center; padding:0 14px; border-left:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); white-space:nowrap; }
+
+/* ESTRUTURA VISUAL DA LEI */
+.lei-anatomy { display:flex; flex-direction:column; gap:2px; margin:16px 0; }
+.la-part { border:1px solid var(--border); background:var(--bg2); position:relative; overflow:hidden; }
+.la-part::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; background:var(--lp-color,var(--acc)); }
+.la-header { display:flex; align-items:center; gap:16px; padding:14px 16px 14px 22px; border-bottom:1px solid var(--border); }
+.la-badge { font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; padding:4px 10px; background:rgba(0,0,0,.4); border:1px solid var(--lp-color,var(--acc)); color:var(--lp-color,var(--acc)); }
+.la-title { font-family:var(--ff-disp); font-size:17px; font-weight:700; color:var(--white); }
+.la-body { padding:14px 22px; font-family:var(--ff-body); font-size:15.5px; color:var(--txt2); line-height:1.6; }
+.la-body b { color:var(--txt); font-weight:600; }
+.la-items { padding:4px 22px 14px; list-style:none; display:flex; flex-direction:column; gap:3px; }
+.la-item { display:flex; gap:12px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.la-item::before { content:'—'; color:var(--lp-color,var(--acc)); flex-shrink:0; font-family:var(--ff-mono); }
+.la-item b { color:var(--txt); font-weight:600; }
+.la-prelim  { --lp-color:var(--teal); }
+.la-norm    { --lp-color:var(--acc); }
+.la-final-p { --lp-color:var(--gold); }
+
+/* HIERARQUIA VISUAL */
+.hier-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin:14px 0; }
+.hier-cell { background:var(--bg2); border:1px solid var(--border); padding:16px 12px; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; overflow:hidden; transition:border-color .2s; }
+.hier-cell:hover { border-color:var(--border2); }
+.hier-cell::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--hc-color,var(--acc)); }
+.hc-1 { --hc-color:#60A5FA; }
+.hc-2 { --hc-color:#818CF8; }
+.hc-3 { --hc-color:#A78BFA; }
+.hc-4 { --hc-color:#C084FC; }
+.hc-5 { --hc-color:#E879F9; }
+.hc-6 { --hc-color:#F472B6; }
+.hc-7 { --hc-color:#FB7185; }
+.hc-8 { --hc-color:#FCA5A5; }
+.hier-name { font-family:var(--ff-disp); font-size:15px; font-weight:800; color:var(--white); text-align:center; }
+.hier-rep  { font-family:var(--ff-mono); font-size:10px; color:var(--txt3); text-align:center; }
+.hier-grf  { font-family:var(--ff-mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase; text-align:center; padding:2px 6px; border:1px solid var(--hc-color,var(--acc)); color:var(--hc-color,var(--acc)); margin-top:4px; }
+
+/* TRIPÉ DA REDAÇÃO */
+.tripe { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin:14px 0; }
+.tripe-card { background:var(--bg2); border:1px solid var(--border); padding:22px; border-top:2px solid var(--tc-color,var(--acc)); position:relative; overflow:hidden; }
+.tripe-card::before { content:''; position:absolute; inset:0; background:var(--tc-color,var(--acc)); opacity:.03; }
+.tc-blue   { --tc-color:var(--acc); }
+.tc-teal   { --tc-color:var(--teal); }
+.tc-gold   { --tc-color:var(--gold); }
+.tripe-title { font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--tc-color,var(--acc)); margin-bottom:16px; }
+.tripe-item { display:flex; gap:10px; margin-bottom:11px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.tripe-item::before { content:'›'; color:var(--tc-color,var(--acc)); flex-shrink:0; font-size:16px; }
+.tripe-item b { color:var(--txt); font-weight:600; }
+.tripe-item span { color:var(--txt3); font-size:14px; font-style:italic; display:block; margin-top:2px; }
+
+/* ALTERAÇÃO TABLE */
+.alt-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
+.alt-table th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.alt-table th:first-child { color:var(--acc); }
+.alt-table td { padding:12px 14px; border:1px solid var(--border); vertical-align:top; background:var(--bg2); font-family:var(--ff-body); line-height:1.6; color:var(--txt); }
+.alt-table td:first-child { font-family:var(--ff-mono); font-size:12px; background:var(--bg3); color:var(--acc-soft); white-space:nowrap; }
+.alt-table tr:hover td { background:rgba(59,130,246,.02); }
+.alt-table td b { color:var(--gold-soft); font-weight:600; }
+.alt-table td .bad  { color:var(--red);    font-weight:600; font-style:normal; }
+.alt-table td .ok   { color:var(--green);  font-weight:600; }
+.alt-table td .warn { color:var(--amber);  font-weight:600; }
+.alt-table td em { color:var(--acc-soft); }
+
+/* CONSOL CARDS */
+.consol-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:14px 0; }
+.consol-card { background:var(--bg2); border:1px solid var(--border); padding:20px; }
+.consol-card:first-child { border-left:3px solid var(--acc); }
+.consol-card:last-child  { border-left:3px solid var(--amber); }
+.consol-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; margin-bottom:14px; }
+.consol-card:first-child .consol-title { color:var(--acc); }
+.consol-card:last-child  .consol-title { color:var(--amber); }
+.consol-item { display:flex; gap:10px; margin-bottom:10px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.consol-item::before { content:'›'; font-size:16px; flex-shrink:0; margin-top:1px; }
+.consol-card:first-child .consol-item::before { color:var(--acc); }
+.consol-card:last-child  .consol-item::before { color:var(--amber); }
+.consol-item b { color:var(--txt); font-weight:600; }
+.consol-item .bad { color:var(--red); font-weight:600; }
+
+/* NUMERAÇÃO BOXES */
+.num-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin:14px 0; }
+.num-card { background:var(--bg2); border:1px solid var(--border); padding:18px; border-top:2px solid var(--nc-color,var(--acc)); }
+.nc-blue   { --nc-color:var(--acc); }
+.nc-teal   { --nc-color:var(--teal); }
+.nc-gold   { --nc-color:var(--gold); }
+.num-card-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--nc-color,var(--acc)); margin-bottom:12px; }
+.num-card-body { font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.6; }
+.num-card-body b { color:var(--txt); font-weight:600; }
+.num-card-body .ok  { color:var(--green); font-weight:600; font-style:normal; }
+.num-card-body .bad { color:var(--red);   font-weight:600; font-style:normal; }
+
+/* SINTH TABLE */
+.synth { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
+.synth th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.synth th:first-child { color:var(--acc); border-bottom:2px solid var(--acc); }
+.synth td { padding:11px 14px; border:1px solid var(--border); vertical-align:top; background:var(--bg2); font-family:var(--ff-body); }
+.synth tr:hover td { background:rgba(59,130,246,.02); }
+.synth td:first-child { color:var(--acc-soft); font-family:var(--ff-mono); font-size:11px; background:var(--bg3); white-space:nowrap; }
+.synth td:nth-child(2) { color:var(--txt); font-size:15.5px; }
+.synth td:last-child { color:var(--txt3); font-size:14px; font-style:italic; }
+.synth td b { color:var(--gold-soft); font-weight:600; font-style:normal; }
+.synth td .bad  { color:var(--red);    font-weight:600; font-style:normal; }
+.synth td .ok   { color:var(--green);  font-weight:600; font-style:normal; }
+.synth td .warn { color:var(--amber);  font-weight:600; font-style:normal; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+@media (max-width:1000px) {
+  .hero { grid-template-columns:1fr; min-height:auto; padding-top:110px; }
+  .hero-right { display:none; }
+  .main { grid-template-columns:1fr; }
+  .sidebar { display:none; }
+  .content { padding:40px 0; }
+  .tripe,.consol-grid,.num-grid { grid-template-columns:1fr; }
+  .hier-grid { grid-template-columns:repeat(4,1fr); }
+}
+@media (max-width:700px) {
+  nav { padding:16px 20px; }
+  .nav-toc { display:none; }
+  .hero { padding:100px 20px 60px; }
+  .main { padding:0 20px 80px; }
+  .hier-grid { grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="cursor"      id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="legislacao_home.html" class="nav-back">Codex Legislativo</a>
+  <div class="nav-logo">LC 95/98</div>
+  <ul class="nav-toc">
+    <li><a href="#geral">Preliminares</a></li>
+    <li><a href="#estrutura">Estrutura</a></li>
+    <li><a href="#articulacao">Articulação</a></li>
+    <li><a href="#alteracao">Alteração</a></li>
+    <li><a href="#consolidacao">Consolidação</a></li>
+    <li><a href="#sintese">Síntese</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Técnica Legislativa</div>
+      <h1>Lei Comp.<br><span class="accent">nº 95</span><br>de 1998</h1>
+      <p class="hero-subtitle">Dispõe sobre a elaboração, a redação, a alteração e a consolidação das leis, conforme determina o parágrafo único do art. 59 da Constituição Federal.</p>
+      <div class="hero-meta">
+        <span class="meta-chip active">Art. 59 CF/88</span>
+        <span class="meta-chip active">3 Partes da Lei</span>
+        <span class="meta-chip active">Hierarquia de Articulação</span>
+        <span class="meta-chip">Vacatio Legis</span>
+        <span class="meta-chip">Consolidação</span>
+        <span class="meta-chip">LC 107/2001</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="toc-card">
+        <div class="toc-label">Índice</div>
+        <ul class="toc-list">
+          <li class="toc-item"><a href="#geral">       <span class="toc-num">00</span>Disposições Preliminares<span class="toc-badge badge-blue">Arts. 1–2</span></a></li>
+          <li class="toc-item"><a href="#estrutura">   <span class="toc-num">01</span>Estruturação das Leis<span class="toc-badge badge-teal">Arts. 3–9</span></a></li>
+          <li class="toc-item"><a href="#articulacao"> <span class="toc-num">02</span>Articulação e Redação<span class="toc-badge badge-gold">Arts. 10–11</span></a></li>
+          <li class="toc-item"><a href="#alteracao">   <span class="toc-num">03</span>Alteração das Leis<span class="toc-badge badge-orange">Art. 12</span></a></li>
+          <li class="toc-item"><a href="#consolidacao"><span class="toc-num">04</span>Consolidação<span class="toc-badge badge-purple">Arts. 13–17</span></a></li>
+          <li class="toc-item"><a href="#finais">      <span class="toc-num">05</span>Disposições Finais<span class="toc-badge badge-green">Arts. 18–19</span></a></li>
+          <li class="toc-item"><a href="#sintese">     <span class="toc-num">★</span>Quadro-Síntese Final<span class="toc-badge badge-blue">Revisão</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-watermark">LEGÍSTICA</div>
+  </section>
+
+  <div class="main">
+
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Capítulos</div>
+        <ul class="sidebar-links" id="sidebarLinks">
+          <li><a href="#geral"        class="active"><span class="sidebar-dot"></span>Disposições Preliminares</a></li>
+          <li><a href="#estrutura"               ><span class="sidebar-dot"></span>Estruturação</a></li>
+          <li><a href="#articulacao"             ><span class="sidebar-dot"></span>Articulação &amp; Redação</a></li>
+          <li><a href="#alteracao"               ><span class="sidebar-dot"></span>Alteração</a></li>
+          <li><a href="#consolidacao"            ><span class="sidebar-dot"></span>Consolidação</a></li>
+          <li><a href="#finais"                  ><span class="sidebar-dot"></span>Disposições Finais</a></li>
+          <li><a href="#sintese"                 ><span class="sidebar-dot"></span>Síntese</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Pontos Críticos</div>
+        <ul class="sidebar-links">
+          <li><a href="#tres-partes"><span class="sidebar-dot" style="background:var(--teal)"></span>3 Partes da Lei</a></li>
+          <li><a href="#hier-art"   ><span class="sidebar-dot" style="background:var(--acc)"></span>Hierarquia Art. 10</a></li>
+          <li><a href="#tripe-red"  ><span class="sidebar-dot" style="background:var(--gold)"></span>Tripé da Redação</a></li>
+          <li><a href="#vacatio"    ><span class="sidebar-dot" style="background:var(--amber)"></span>Vacatio Legis</a></li>
+          <li><a href="#vedacoes"   ><span class="sidebar-dot" style="background:var(--red)"></span>Vedações Alt. (Art. 12)</a></li>
+          <li><a href="#consol-alt" ><span class="sidebar-dot" style="background:var(--purple)"></span>O que a consolid. permite</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="content">
+
+      <!-- ═══════════════════════════════
+           00 — DISPOSIÇÕES PRELIMINARES
+      ═══════════════════════════════ -->
+      <div class="chapter" id="geral" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>00</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo I · Arts. 1º e 2º</div>
+            <div class="chapter-title">Disposições Preliminares</div>
+          </div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>1º</strong>art.</div>
+          <div class="art-text">A elaboração, a redação, a alteração e a consolidação das leis obedecerão ao disposto nesta Lei Complementar.
+          <b>§ único.</b> As disposições desta Lei Complementar aplicam-se, ainda, às <kw class="kw">medidas provisórias</kw> e demais atos normativos referidos no art. 59 da CF/88, bem como, <warn class="warn">no que couber</warn>, aos <b>decretos</b> e demais atos de regulamentação expedidos por órgãos do Poder Executivo.</div>
+        </div>
+
+        <div class="callout c-blue reveal">
+          <div class="callout-head">Âmbito de Aplicação — Art. 59 CF/88</div>
+          <p>Aplica-se integralmente a: <strong>emendas constitucionais, leis complementares, leis ordinárias, leis delegadas, medidas provisórias, decretos legislativos e resoluções</strong>. Aplica-se "no que couber" aos <strong>decretos e atos regulamentares do Executivo</strong>.</p>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Numeração das Leis (Art. 2º §2º)</h3>
+        <div class="num-grid reveal">
+          <div class="num-card nc-blue">
+            <div class="num-card-title">Emendas Constitucionais</div>
+            <div class="num-card-body">Numeração iniciada a partir da <b>promulgação da CF/88</b> (1988).</div>
+          </div>
+          <div class="num-card nc-teal">
+            <div class="num-card-title">LCs · LOs · LDs</div>
+            <div class="num-card-body">Numeração sequencial <b>em continuidade</b> às séries iniciadas <b>em 1946</b>.</div>
+          </div>
+          <div class="num-card nc-gold">
+            <div class="num-card-title">Observação</div>
+            <div class="num-card-body">LC, LO e LD compartilham a <b>mesma série numérica</b> contínua desde 1946.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           01 — ESTRUTURAÇÃO DAS LEIS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="estrutura" style="--chapter-color:var(--teal)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>01</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo II · Seção I · Arts. 3–9</div>
+            <div class="chapter-title">Estruturação das Leis</div>
+          </div>
+        </div>
+
+        <!-- 3 Partes -->
+        <h3 class="reveal" id="tres-partes"><span class="h3-bar"></span>As Três Partes Básicas da Lei (Art. 3º)</h3>
+        <div class="lei-anatomy reveal">
+          <div class="la-part la-prelim">
+            <div class="la-header">
+              <div class="la-badge">I</div>
+              <div class="la-title">Parte Preliminar</div>
+            </div>
+            <ul class="la-items">
+              <li class="la-item"><b>Epígrafe</b> — identificação numérica singular: espécie normativa + número + ano</li>
+              <li class="la-item"><b>Ementa</b> — explicitação concisa do objeto, sob forma de título</li>
+              <li class="la-item"><b>Preâmbulo</b> — órgão competente para a prática do ato e sua base legal</li>
+              <li class="la-item"><b>Enunciado do objeto</b> — primeiro artigo indica o objeto e âmbito de aplicação</li>
+              <li class="la-item"><b>Âmbito de aplicação</b> das disposições normativas</li>
+            </ul>
+          </div>
+          <div class="la-part la-norm">
+            <div class="la-header">
+              <div class="la-badge">II</div>
+              <div class="la-title">Parte Normativa</div>
+            </div>
+            <div class="la-body">Texto das normas de <b>conteúdo substantivo</b> relacionadas com a matéria regulada.</div>
+          </div>
+          <div class="la-part la-final-p">
+            <div class="la-header">
+              <div class="la-badge">III</div>
+              <div class="la-title">Parte Final</div>
+            </div>
+            <ul class="la-items">
+              <li class="la-item">Disposições necessárias à <b>implementação</b> das normas substantivas</li>
+              <li class="la-item"><b>Disposições transitórias</b> — se for o caso</li>
+              <li class="la-item"><b>Cláusula de vigência</b></li>
+              <li class="la-item"><b>Cláusula de revogação</b> — quando couber</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Elementos da Parte Preliminar -->
+        <h3 class="reveal"><span class="h3-bar"></span>Detalhamento dos Elementos (Arts. 4–7)</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Elemento</th><th>Definição e Regras</th></tr></thead>
+          <tbody>
+            <tr><td>Epígrafe<br>(Art. 4)</td><td>Grafada em <b>caracteres MAIÚSCULOS</b>. Formada por: ① título da espécie normativa + ② número + ③ ano de promulgação. <em style="color:var(--txt3);font-size:14px">Ex: LEI Nº 9.784, DE 29 DE JANEIRO DE 1999</em></td></tr>
+            <tr><td>Ementa<br>(Art. 5)</td><td>Grafada em caracteres que a <b>realcem</b>. Explicitará, de modo <b>conciso e sob a forma de título</b>, o objeto da lei.</td></tr>
+            <tr><td>Preâmbulo<br>(Art. 6)</td><td>Indicará o <b>órgão ou instituição competente</b> para a prática do ato e sua <b>base legal</b>.</td></tr>
+            <tr><td>1º Artigo<br>(Art. 7)</td><td>Indica o <b>objeto da lei</b> e o <b>âmbito de aplicação</b>. Regras: I — cada lei trata de <b>um único objeto</b> (exceto codificações); II — vedada matéria estranha; III — âmbito tão específico quanto possível; IV — mesmo assunto não disciplinado por mais de uma lei, salvo lei subseqüente que <b>complemente lei básica por remissão expressa</b>.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Vigência -->
+        <h3 class="reveal" id="vacatio"><span class="h3-bar"></span>Cláusula de Vigência (Art. 8º)</h3>
+        <div class="callout c-amber reveal">
+          <div class="callout-head">Regra Geral</div>
+          <p>A vigência será indicada de forma <strong>expressa</strong> e de modo a contemplar <strong>prazo razoável</strong> para amplo conhecimento. A cláusula <strong>"entra em vigor na data de sua publicação"</strong> é reservada para leis de <strong>pequena repercussão</strong>.</p>
+        </div>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Contagem da Vacatio Legis (§1º e §2º — LC 107/2001)</div></div>
+          <div class="flow-row"><div class="flow-index">①</div><div class="flow-body">A contagem <b>inclui a data da publicação</b> e o <b>último dia do prazo</b>.</div><div class="flow-tag">§1º</div></div>
+          <div class="flow-row flow-note"><div class="flow-index">②</div><div class="flow-body">Lei entra em vigor no <b>dia SUBSEQUENTE</b> à consumação integral do prazo.</div><div class="flow-tag">§1º</div></div>
+          <div class="flow-row flow-blue"><div class="flow-index">③</div><div class="flow-body">Cláusula padrão: <b>"Esta lei entra em vigor após decorridos (X) dias de sua publicação oficial"</b>.</div><div class="flow-tag">§2º</div></div>
+        </div>
+
+        <!-- Revogação -->
+        <h3 class="reveal"><span class="h3-bar"></span>Cláusula de Revogação (Art. 9º)</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>9º</strong>art.</div>
+          <div class="art-text">A cláusula de revogação deverá <kw class="kw">enumerar, expressamente</kw>, as leis ou disposições legais revogadas. <b>(Redação dada pela LC 107/2001)</b></div>
+        </div>
+        <div class="callout c-red reveal">
+          <div class="callout-head">Ponto de Atenção — Revogação Tácita</div>
+          <p>A LC 95/98 exige enumeração <strong>expressa</strong> das leis revogadas — impede a revogação meramente tácita implícita, mas não a torna inconstitucional quando ocorra. A consolidação pode depois declarar dispositivos implicitamente revogados (Art. 13 §2º XI).</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           02 — ARTICULAÇÃO E REDAÇÃO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="articulacao" style="--chapter-color:var(--gold)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>02</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo II · Seção II · Arts. 10–11</div>
+            <div class="chapter-title">Articulação e Redação das Leis</div>
+          </div>
+        </div>
+
+        <!-- Hierarquia -->
+        <h3 class="reveal" id="hier-art"><span class="h3-bar"></span>Hierarquia de Articulação (Art. 10)</h3>
+        <div class="hier-grid reveal">
+          <div class="hier-cell hc-1">
+            <div class="hier-name">Artigo</div>
+            <div class="hier-rep">Art. (ordinal até 9º, cardinal a partir do 10)</div>
+            <div class="hier-grf">unidade básica</div>
+          </div>
+          <div class="hier-cell hc-2">
+            <div class="hier-name">Parágrafo</div>
+            <div class="hier-rep">§ (ordinal até 9º; "parágrafo único" se só um)</div>
+            <div class="hier-grf">complementa art.</div>
+          </div>
+          <div class="hier-cell hc-3">
+            <div class="hier-name">Inciso</div>
+            <div class="hier-rep">Algarismos romanos (I, II, III…)</div>
+            <div class="hier-grf">discriminação</div>
+          </div>
+          <div class="hier-cell hc-4">
+            <div class="hier-name">Alínea</div>
+            <div class="hier-rep">Letras minúsculas (a, b, c…)</div>
+            <div class="hier-grf">sub-inciso</div>
+          </div>
+          <div class="hier-cell hc-5">
+            <div class="hier-name">Item</div>
+            <div class="hier-rep">Algarismos arábicos (1, 2, 3…)</div>
+            <div class="hier-grf">sub-alínea</div>
+          </div>
+          <div class="hier-cell hc-6">
+            <div class="hier-name">Subseção</div>
+            <div class="hier-rep">Algarismos romanos, minúsculo, negrito</div>
+            <div class="hier-grf">grupo artigos</div>
+          </div>
+          <div class="hier-cell hc-7">
+            <div class="hier-name">Seção</div>
+            <div class="hier-rep">Algarismos romanos, minúsculo, negrito</div>
+            <div class="hier-grf">grupo subseções</div>
+          </div>
+          <div class="hier-cell hc-8">
+            <div class="hier-name">Cap · Tít · Livro · Parte</div>
+            <div class="hier-rep">Algarismos romanos — MAIÚSCULOS</div>
+            <div class="hier-grf">agregação maior</div>
+          </div>
+        </div>
+        <div class="callout c-blue reveal">
+          <div class="callout-head">Regras de Agrupamento (Art. 10, incs. V–VIII)</div>
+          <p>Artigos → Subseções → Seções → Capítulos → Títulos → Livros → Partes. Capítulos, Títulos, Livros e Partes: <strong>MAIÚSCULOS + algarismos romanos</strong>. Subseções e Seções: <strong>minúsculas + negrito + romanos</strong>. Partes podem desdobrar-se em Parte Geral e Parte Especial. Admitem-se agrupamentos em <strong>Disposições Preliminares, Gerais, Finais ou Transitórias</strong>.</p>
+        </div>
+
+        <!-- Tripé da Redação -->
+        <h3 class="reveal" id="tripe-red"><span class="h3-bar"></span>Tripé da Boa Redação — Clareza, Precisão e Ordem Lógica (Art. 11)</h3>
+        <div class="tripe reveal">
+          <div class="tripe-card tc-blue">
+            <div class="tripe-title">I — Clareza</div>
+            <div class="tripe-item b>a</b><span>Palavras em sentido comum; nomenclatura técnica apenas quando necessário</span></div>
+            <div class="tripe-item"><b>b</b><span>Frases <b>curtas e concisas</b></span></div>
+            <div class="tripe-item"><b>c</b><span>Orações na <b>ordem direta</b>; evitar preciosismo, neologismo e adjetivações</span></div>
+            <div class="tripe-item"><b>d</b><span>Uniformidade do <b>tempo verbal</b> — preferência pelo presente ou futuro simples</span></div>
+            <div class="tripe-item"><b>e</b><span>Pontuação judiciosa — evitar abusos de caráter estilístico</span></div>
+          </div>
+          <div class="tripe-card tc-teal">
+            <div class="tripe-title">II — Precisão</div>
+            <div class="tripe-item"><b>a</b><span>Linguagem que permita perfeita compreensão do objetivo da lei</span></div>
+            <div class="tripe-item"><b>b</b><span>Ideia repetida → mesmas palavras; <b>evitar sinonímia</b> estilística</span></div>
+            <div class="tripe-item"><b>c</b><span>Evitar <b>duplo sentido</b></span></div>
+            <div class="tripe-item"><b>d</b><span>Termos com mesmo sentido em <b>todo o território nacional</b></span></div>
+            <div class="tripe-item"><b>e</b><span>Siglas: apenas as consagradas; <b>primeira referência</b> acompanhada de explicitação</span></div>
+            <div class="tripe-item"><b>f</b><span>Números e percentuais grafados <b>por extenso</b> (exceto datas, número de lei e quando prejudicar compreensão)</span></div>
+            <div class="tripe-item"><b>g</b><span>Indicar <b>expressamente o dispositivo</b> objeto de remissão — vedado "anterior", "seguinte"</span></div>
+          </div>
+          <div class="tripe-card tc-gold">
+            <div class="tripe-title">III — Ordem Lógica</div>
+            <div class="tripe-item"><b>a</b><span>Reunir sob categorias de agregação apenas disposições relacionadas ao objeto</span></div>
+            <div class="tripe-item"><b>b</b><span>Cada artigo: <b>um único assunto ou princípio</b></span></div>
+            <div class="tripe-item"><b>c</b><span>Parágrafos: aspectos <b>complementares ao caput</b> e <b>exceções</b> à regra</span></div>
+            <div class="tripe-item"><b>d</b><span>Discriminações e enumerações: via <b>incisos, alíneas e itens</b></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           03 — ALTERAÇÃO DAS LEIS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="alteracao" style="--chapter-color:var(--orange)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>03</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo II · Seção III · Art. 12</div>
+            <div class="chapter-title">Alteração das Leis</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Modalidades de Alteração (Art. 12, I–III)</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Modalidades de Alteração — Art. 12</div></div>
+          <div class="flow-row"><div class="flow-index">I</div><div class="flow-body">Alteração <b>CONSIDERÁVEL</b> → <b>Reprodução integral em novo texto</b></div><div class="flow-tag">reconstituição</div></div>
+          <div class="flow-row"><div class="flow-index">II</div><div class="flow-body"><b>Revogação parcial</b></div><div class="flow-tag">suprimir</div></div>
+          <div class="flow-row"><div class="flow-index">III</div><div class="flow-body">Demais casos → <b>substituição no próprio texto</b> ou <b>acréscimo de dispositivo novo</b></div><div class="flow-tag">alterar</div></div>
+        </div>
+
+        <h3 class="reveal" id="vedacoes"><span class="h3-bar"></span>Regras para Alteração por Substituição (Art. 12, III) — Pontos Críticos</h3>
+        <table class="alt-table reveal">
+          <thead><tr><th>Alínea</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>b) — Renumeração</td>
+              <td><b class="bad">VEDADA</b> qualquer renumeração de artigos e de unidades superiores ao artigo. Novo dispositivo intercalado usa o <b>mesmo número do artigo/unidade imediatamente anterior + letras maiúsculas em ordem alfabética</b> (ex: Art. 8-A, Art. 8-B…). <em>(LC 107/2001)</em></td>
+            </tr>
+            <tr>
+              <td>c) — Aproveitamento de número</td>
+              <td><b class="bad">VEDADO</b> o aproveitamento do número de dispositivo <b>revogado, vetado, declarado inconstitucional pelo STF ou com execução suspensa pelo Senado Federal</b>. A lei deve manter a indicação seguida das expressões: <b>"revogado"</b>, <b>"vetado"</b>, <b>"declarado inconstitucional, em controle concentrado, pelo STF"</b>, ou <b>"execução suspensa pelo Senado Federal, na forma do art. 52, X, da CF"</b>.</td>
+            </tr>
+            <tr>
+              <td>d) — Reordenação interna</td>
+              <td><b class="ok">ADMISSÍVEL</b> a reordenação interna das unidades em que se desdobra o artigo. O artigo assim modificado deve ser identificado com as letras <b>"NR"</b> maiúsculas, entre parênteses, <b>uma única vez ao seu final</b>. <em>(LC 107/2001)</em></td>
+            </tr>
+            <tr>
+              <td>§ único — "Dispositivo"</td>
+              <td>O termo <b>"dispositivo"</b> nesta Lei refere-se a: <b>artigos, parágrafos, incisos, alíneas ou itens</b>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout c-red reveal">
+          <div class="callout-head">Resumo das Vedações — Decorar</div>
+          <p>① <strong>VEDADA renumeração</strong> de artigos e unidades superiores — usar mesma numeração + letras (8-A, 8-B…) · ② <strong>VEDADO reaproveitar</strong> número de dispositivo revogado/vetado/inconstitucional/suspenso · ③ <strong>NR</strong> ao final do artigo reordenado internamente.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           04 — CONSOLIDAÇÃO
+      ═══════════════════════════════ -->
+      <div class="chapter" id="consolidacao" style="--chapter-color:var(--purple)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>04</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo III · Arts. 13–17</div>
+            <div class="chapter-title">Consolidação das Leis e Outros Atos Normativos</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Conceito de Consolidação (Art. 13 §1º)</h3>
+        <div class="art-block reveal">
+          <div class="art-id"><strong>13</strong><br><small>§1º</small></div>
+          <div class="art-text">A consolidação consistirá na <kw class="kw">integração de todas as leis pertinentes a determinada matéria num único diploma legal</kw>, revogando-se <b>formalmente</b> as leis incorporadas à consolidação, <b>sem modificação do alcance nem interrupção da força normativa</b> dos dispositivos consolidados.</div>
+        </div>
+
+        <!-- O que PODE e o que NÃO PODE -->
+        <h3 class="reveal" id="consol-alt"><span class="h3-bar"></span>Alterações Permitidas na Consolidação (Art. 13 §2º)</h3>
+        <div class="consol-grid reveal">
+          <div class="consol-card">
+            <div class="consol-title">✓ Podem ser feitas (I a XI)</div>
+            <div class="consol-item">Introdução de <b>novas divisões</b> do texto legal base</div>
+            <div class="consol-item">Diferente colocação e <b>renumeração</b> dos artigos consolidados</div>
+            <div class="consol-item"><b>Fusão</b> de disposições repetitivas ou de valor normativo idêntico</div>
+            <div class="consol-item">Atualização da <b>denominação de órgãos</b> e entidades da adm. pública</div>
+            <div class="consol-item">Atualização de <b>termos antiquados</b> e modos de escrita ultrapassados</div>
+            <div class="consol-item">Atualização do <b>valor de penas pecuniárias</b>, com base em indexação padrão</div>
+            <div class="consol-item">Eliminação de <b>ambiguidades</b> decorrentes do mau uso do vernáculo</div>
+            <div class="consol-item"><b>Homogeneização terminológica</b> do texto</div>
+            <div class="consol-item">Supressão de dispositivos declarados <b>inconstitucionais pelo STF</b></div>
+            <div class="consol-item">Indicação de dispositivos <b>não recepcionados</b> pela CF/88</div>
+            <div class="consol-item">Declaração expressa de revogação de dispositivos <b>implicitamente revogados</b></div>
+          </div>
+          <div class="consol-card">
+            <div class="consol-title">⚠ Atenção — Limitação</div>
+            <div class="consol-item"><b class="bad">PRESERVA-SE</b> o conteúdo normativo original — as alterações são formais/redacionais, não de mérito.</div>
+            <div class="consol-item">As providências dos incs. IX, X e XI devem ser <b>expressa e fundadamente justificadas</b>, com indicação precisa das fontes (§3º).</div>
+            <div class="consol-item"><b class="bad">NÃO</b> serão objeto de consolidação as <b>medidas provisórias ainda não convertidas em lei</b> (Art. 14 §1º).</div>
+            <div class="consol-item">As leis federais serão reunidas na <b>Consolidação da Legislação Federal</b>, em volumes de matérias conexas ou afins (Art. 13 caput — LC 107/2001).</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Procedimento de Consolidação (Art. 14)</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Fluxo de Consolidação das Leis Federais</div></div>
+          <div class="flow-row"><div class="flow-index">I</div><div class="flow-body"><b>Poder Executivo ou Legislativo</b> → levantamento da legislação em vigor e formulação de projeto de lei de consolidação com indicação precisa dos diplomas expressa ou implicitamente revogados.</div><div class="flow-tag">iniciativa</div></div>
+          <div class="flow-row"><div class="flow-index">II</div><div class="flow-body">Apreciação pelo Poder Legislativo conforme o <b>Regimento Interno de cada Casa</b>, em <b>procedimento simplificado</b>, visando a dar celeridade.</div><div class="flow-tag">tramitação</div></div>
+          <div class="flow-row flow-blue"><div class="flow-index">§2</div><div class="flow-body">A <b>Mesa do CN, de qualquer Casa, ou qualquer membro ou Comissão</b> poderá formular projeto de lei de consolidação.</div><div class="flow-tag">legitimados</div></div>
+          <div class="flow-row flow-note"><div class="flow-index">§3</div><div class="flow-body">Admite-se projeto de consolidação exclusivamente para: I — declaração de revogação implícita; II — inclusão de dispositivos esparsos em leis preexistentes.</div><div class="flow-tag">especial</div></div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Atualização Periódica (Arts. 15–17)</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Artigo</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Art. 15</td><td>Na <b>primeira sessão legislativa de cada legislatura</b>, a Mesa do Congresso Nacional promoverá a atualização da Consolidação das Leis Federais Brasileiras, incorporando as ECs, leis, decretos legislativos e resoluções promulgadas durante a <b>legislatura imediatamente anterior</b>.</td></tr>
+            <tr><td>Art. 16</td><td>Órgãos subordinados à Presidência da República, Ministérios e entidades da adm. indireta: triagem, exame e consolidação de <b>decretos de conteúdo normativo e geral</b> e demais atos normativos inferiores, remetendo à Presidência para posterior publicação.</td></tr>
+            <tr><td>Art. 17</td><td>O Poder Executivo, até <b>180 dias do início do primeiro ano do mandato presidencial</b>, promoverá a atualização das coletâneas, incorporando decretos e atos do <b>último quadriênio</b>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════════
+           05 — DISPOSIÇÕES FINAIS
+      ═══════════════════════════════ -->
+      <div class="chapter" id="finais" style="--chapter-color:var(--green)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>05</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Capítulo IV · Arts. 18–19</div>
+            <div class="chapter-title">Disposições Finais</div>
+          </div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>18</strong>art.</div>
+          <div class="art-text">Eventual <kw class="kw">inexatidão formal</kw> de norma elaborada mediante processo legislativo regular <bad class="bad">não constitui escusa válida</bad> para o seu <b>descumprimento</b>.</div>
+        </div>
+
+        <div class="callout c-green reveal">
+          <div class="callout-head">Art. 18 — Interpretação para o Concurso</div>
+          <p>Um erro de forma (vírgula, numeração, redação inadequada) em lei aprovada pelo processo legislativo regular <strong>não permite que alguém descumpra a lei</strong> alegando esse defeito formal. O vício formal não invalida o conteúdo normativo.</p>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>19</strong>art.</div>
+          <div class="art-text">Esta Lei Complementar entra em vigor no prazo de <b>noventa dias</b>, a partir da data de sua publicação.<br><warn class="warn">Brasília, 26 de fevereiro de 1998.</warn></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════
+           SÍNTESE FINAL
+      ═══════════════════════════════ -->
+      <div class="chapter" id="sintese" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>★</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Revisão Completa</div>
+            <div class="chapter-title">Quadro-Síntese — LC 95/98</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Estrutura &amp; Articulação</h3>
+        <table class="synth reveal">
+          <thead><tr><th>Instituto</th><th>Regra / Conceito</th><th>Ponto de Atenção</th></tr></thead>
+          <tbody>
+            <tr><td>3 Partes da Lei<br>(Art. 3)</td><td><b>Preliminar, Normativa, Final</b></td><td>Parte Final contém vigência, revogação e disposições transitórias</td></tr>
+            <tr><td>Epígrafe (Art. 4)</td><td>MAIÚSCULAS · espécie + número + ano</td><td>Propicia identificação numérica <b>singular</b></td></tr>
+            <tr><td>Ementa (Art. 5)</td><td>Realçada · concisa · forma de título</td><td>Explicitação do <b>objeto</b></td></tr>
+            <tr><td>Preâmbulo (Art. 6)</td><td>Órgão competente + base legal</td><td>—</td></tr>
+            <tr><td>1º Artigo (Art. 7)</td><td>Objeto + âmbito de aplicação</td><td>Cada lei trata de <b>um único objeto</b> (exceto codificações)</td></tr>
+            <tr><td>Vigência (Art. 8)</td><td>Indicada <b>expressamente</b></td><td>"Na data da publicação" → apenas leis de <b>pequena repercussão</b></td></tr>
+            <tr><td>Vacatio Legis<br>(Art. 8 §§1–2)</td><td>Inclui 1º dia + último dia → entra em vigor no <b>dia seguinte</b></td><td>Cláusula padrão: "após decorridos X dias"</td></tr>
+            <tr><td>Revogação (Art. 9)</td><td>Enumerar <b>expressamente</b> as leis revogadas</td><td>Vedada revogação meramente genérica</td></tr>
+            <tr><td>Unidade básica<br>(Art. 10 I)</td><td>Artigo (Art.) — ordinal até 9º; cardinal a partir do 10</td><td>Parágrafos: ordinal até 9º; único por extenso</td></tr>
+            <tr><td>Incisos (Art. 10 IV)</td><td>Algarismos <b>romanos</b></td><td>Alíneas: letras <b>minúsculas</b> · Itens: arábicos</td></tr>
+            <tr><td>Cap / Tít / Livro / Parte<br>(Art. 10 VI)</td><td><b>MAIÚSCULOS + romanos</b></td><td>Subseção e Seção: minúsculas + negrito + romanos</td></tr>
+            <tr><td>Clareza (Art. 11 I)</td><td>Sentido comum · frases curtas · ordem direta · presente/futuro simples</td><td>Evitar neologismo e adjetivações</td></tr>
+            <tr><td>Precisão (Art. 11 II)</td><td>Sem sinonímia estilística · sem duplo sentido · por extenso números e %</td><td>Remissão: indicar <b>expressamente</b> o dispositivo (proibido "anterior")</td></tr>
+            <tr><td>Ordem Lógica (Art. 11 III)</td><td>Um assunto por artigo · §§ para exceções/complementos</td><td>Enumerações via incisos, alíneas e itens</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Alteração &amp; Consolidação</h3>
+        <table class="synth reveal">
+          <thead><tr><th>Instituto</th><th>Regra / Conceito</th><th>Ponto de Atenção</th></tr></thead>
+          <tbody>
+            <tr><td>Alteração<br>(Art. 12 I)</td><td>Alteração considerável → <b>novo texto integral</b></td><td>—</td></tr>
+            <tr><td>Alteração<br>(Art. 12 III b)</td><td>Novo dispositivo → mesmo nº + <b>letras maiúsculas</b> (8-A, 8-B…)</td><td class="bad">VEDADA renumeração</td></tr>
+            <tr><td>Aproveitamento de nº<br>(Art. 12 III c)</td><td class="bad">VEDADO</td><td>Revogado/vetado/inconstitucional/suspenso → manter com a expressão adequada</td></tr>
+            <tr><td>NR (Art. 12 III d)</td><td>"NR" ao final do artigo reordenado internamente</td><td>Uma única vez ao final</td></tr>
+            <tr><td>Consolidação<br>(Art. 13 §1)</td><td>Integração num único diploma; revogação <b>formal</b> das leis incorporadas</td><td>Sem modificar o alcance ou interromper a força normativa</td></tr>
+            <tr><td>MP na consolidação<br>(Art. 14 §1)</td><td class="bad">NÃO podem ser consolidadas</td><td>MPv ainda não convertidas em lei</td></tr>
+            <tr><td>Atualização legislativa<br>(Art. 15)</td><td>1ª sessão de cada legislatura</td><td>Mesa do CN incorpora produção da legislatura anterior</td></tr>
+            <tr><td>Atualização executiva<br>(Art. 17)</td><td>Até <b>180 dias</b> do início do 1º ano do mandato presidencial</td><td>Incorpora decretos e atos do <b>último quadriênio</b></td></tr>
+            <tr><td>Inexatidão formal<br>(Art. 18)</td><td class="bad">NÃO constitui escusa</td><td>Erro formal não autoriza descumprimento da lei</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:60px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;" class="reveal">
+        <div style="font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)">LC 95/98 · Codex Legislativo · 2026</div>
+        <a href="legislacao_home.html" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);text-decoration:none;display:flex;align-items:center;gap:8px;transition:opacity .2s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">← Voltar ao Codex</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.art-block,.callout,.hier-cell,.tripe-card,.consol-card,.la-part,td,th,.flow-row').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='50px';ring.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px';});
+});
+const pb=document.getElementById('progress');
+document.addEventListener('scroll',()=>{pb.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.transitionDelay=(i%5)*.07+'s';e.target.classList.add('visible');}});
+},{threshold:.08});
+reveals.forEach(el=>io.observe(el));
+const sections=document.querySelectorAll('.chapter');
+const sideLinks=document.querySelectorAll('#sidebarLinks a');
+document.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  sideLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>
