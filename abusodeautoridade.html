@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lei 13.869/19 — Codex Legislativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:          #09090B;
+  --bg2:         #0F0F12;
+  --bg3:         #141418;
+  --bg4:         #1A1A20;
+  --border:      #222228;
+  --border2:     #2C2C36;
+  /* primary accent = red for this law */
+  --acc:         #E05252;
+  --acc-soft:    #F08080;
+  --acc-dim:     #210A0A;
+  --acc-glow:    rgba(224,82,82,0.12);
+  /* secondary accents */
+  --gold:        #C9A84C;
+  --gold-dim:    #2A2010;
+  --gold-soft:   #E8C97A;
+  --amber:       #F59E0B;
+  --amber-dim:   #271A00;
+  --blue:        #3B82F6;
+  --blue-dim:    #0D1A35;
+  --teal:        #2DD4BF;
+  --teal-dim:    #051F1C;
+  --purple:      #A855F7;
+  --purple-dim:  #1A0A2E;
+  --green:       #22C55E;
+  --green-dim:   #071A0F;
+  --orange:      #F97316;
+  --orange-dim:  #1F0D00;
+  --txt:         #D4D4D8;
+  --txt2:        #71717A;
+  --txt3:        #3F3F46;
+  --white:       #FAFAFA;
+  --ff-disp:     'Syne', sans-serif;
+  --ff-body:     'Cormorant Garamond', serif;
+  --ff-mono:     'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--ff-body);
+  font-size: 18px;
+  line-height: 1.7;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor { position:fixed; width:10px; height:10px; background:var(--acc); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:difference; }
+.cursor-ring { position:fixed; width:36px; height:36px; border:1px solid rgba(224,82,82,.45); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+
+/* GRID OVERLAY */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px),
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,.011) 60px,rgba(255,255,255,.011) 61px);
+}
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(ellipse 70% 40% at 50% -5%, rgba(224,82,82,.06), transparent 65%);
+}
+
+.page { position:relative; z-index:1; }
+
+/* PROGRESS */
+.progress-bar { position:fixed; top:0; left:0; z-index:300; height:2px; background:var(--acc); width:0%; transition:width .1s linear; box-shadow:0 0 8px var(--acc); }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 48px; border-bottom:1px solid var(--border);
+  background:rgba(9,9,11,.88); backdrop-filter:blur(20px);
+}
+.nav-back { font-family:var(--ff-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--txt2); text-decoration:none; display:flex; align-items:center; gap:10px; transition:color .2s; }
+.nav-back:hover { color:var(--acc); }
+.nav-back::before { content:'←'; font-size:14px; }
+.nav-logo { font-family:var(--ff-mono); font-size:12px; letter-spacing:.22em; color:var(--acc); text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.nav-logo::before { content:'§'; font-size:18px; font-family:var(--ff-body); }
+.nav-toc { display:flex; gap:26px; list-style:none; }
+.nav-toc a { font-family:var(--ff-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--txt3); text-decoration:none; transition:color .2s; }
+.nav-toc a:hover { color:var(--acc); }
+
+/* HERO */
+.hero {
+  min-height:92vh; display:grid; grid-template-columns:1fr 1fr;
+  align-items:center; padding:140px 48px 80px; gap:80px;
+  position:relative; overflow:hidden;
+}
+.hero-watermark {
+  position:absolute; right:-50px; bottom:-60px;
+  font-family:var(--ff-disp); font-size:clamp(120px,18vw,280px); font-weight:800;
+  color:transparent; -webkit-text-stroke:1px rgba(224,82,82,.055);
+  letter-spacing:-0.04em; line-height:1; user-select:none; pointer-events:none; white-space:nowrap;
+}
+.hero-left { animation:fadeUp .8s ease both; }
+.hero-eyebrow { font-family:var(--ff-mono); font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--acc); margin-bottom:20px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:''; display:block; width:36px; height:1px; background:var(--acc); }
+.hero h1 { font-family:var(--ff-disp); font-size:clamp(44px,5.5vw,78px); font-weight:800; line-height:0.9; letter-spacing:-0.03em; color:var(--white); margin-bottom:28px; }
+.hero h1 .accent { color:var(--acc); }
+.hero-subtitle { font-family:var(--ff-body); font-size:20px; font-weight:300; font-style:italic; color:var(--txt2); margin-bottom:36px; line-height:1.6; max-width:440px; }
+.hero-meta { display:flex; flex-wrap:wrap; gap:10px; }
+.meta-chip { font-family:var(--ff-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; padding:6px 14px; border:1px solid var(--border2); color:var(--txt2); border-radius:2px; transition:border-color .2s,color .2s; cursor:none; }
+.meta-chip:hover { border-color:var(--acc); color:var(--acc); }
+.meta-chip.active { border-color:var(--acc); color:var(--acc); background:var(--acc-dim); }
+
+/* HERO RIGHT TOC */
+.hero-right { animation:fadeUp .8s .15s ease both; }
+.toc-card { border:1px solid var(--border2); border-top:2px solid var(--acc); background:var(--bg2); padding:32px; position:relative; overflow:hidden; }
+.toc-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 0%, var(--acc-glow), transparent); pointer-events:none; }
+.toc-label { font-family:var(--ff-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); margin-bottom:24px; display:flex; align-items:center; gap:10px; }
+.toc-label::after { content:''; flex:1; height:1px; background:var(--border2); }
+.toc-list { list-style:none; display:flex; flex-direction:column; gap:2px; }
+.toc-item a { display:flex; align-items:center; gap:14px; padding:11px 14px; text-decoration:none; font-family:var(--ff-body); font-size:16px; color:var(--txt2); border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s,padding .2s; }
+.toc-item a:hover { color:var(--white); border-left-color:var(--acc); background:rgba(224,82,82,.06); padding-left:20px; }
+.toc-num { font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); min-width:28px; }
+.toc-badge { margin-left:auto; font-family:var(--ff-mono); font-size:9px; letter-spacing:.1em; padding:2px 8px; border-radius:2px; }
+.badge-red    { background:var(--acc-dim);    color:var(--acc); }
+.badge-amber  { background:var(--amber-dim);  color:var(--amber); }
+.badge-orange { background:var(--orange-dim); color:var(--orange); }
+.badge-teal   { background:var(--teal-dim);   color:var(--teal); }
+.badge-gold   { background:var(--gold-dim);   color:var(--gold); }
+.badge-purple { background:var(--purple-dim); color:var(--purple); }
+
+/* MAIN GRID */
+.main { display:grid; grid-template-columns:240px 1fr; max-width:1300px; margin:0 auto; padding:0 48px 120px; }
+
+/* SIDEBAR */
+.sidebar { position:sticky; top:72px; height:calc(100vh - 72px); overflow-y:auto; padding:48px 24px 48px 0; border-right:1px solid var(--border); scrollbar-width:thin; scrollbar-color:var(--border2) transparent; }
+.sidebar-section { margin-bottom:36px; }
+.sidebar-title { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:12px; padding-left:12px; }
+.sidebar-links { list-style:none; display:flex; flex-direction:column; gap:1px; }
+.sidebar-links a { display:flex; align-items:center; gap:10px; padding:8px 12px; font-family:var(--ff-body); font-size:15px; color:var(--txt3); text-decoration:none; border-left:2px solid transparent; transition:color .2s,border-color .2s,background .2s; }
+.sidebar-links a:hover { color:var(--txt); background:var(--bg3); }
+.sidebar-links a.active { color:var(--acc); border-left-color:var(--acc); background:var(--acc-dim); }
+.sidebar-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.5; flex-shrink:0; }
+
+/* CONTENT */
+.content { padding:48px 0 48px 56px; }
+
+/* CHAPTER */
+.chapter { margin-bottom:80px; scroll-margin-top:90px; }
+.chapter-head { display:flex; align-items:flex-start; gap:24px; margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid var(--border); position:relative; }
+.chapter-head::after { content:''; position:absolute; bottom:-1px; left:0; height:2px; width:60px; background:var(--chapter-color, var(--acc)); }
+.chapter-num-block { flex-shrink:0; width:52px; height:52px; border:1px solid var(--chapter-color, var(--acc)); display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.3); }
+.chapter-num-block span { font-family:var(--ff-mono); font-size:11px; font-weight:600; color:var(--chapter-color, var(--acc)); letter-spacing:.06em; }
+.chapter-eyebrow { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--txt3); margin-bottom:6px; }
+.chapter-title { font-family:var(--ff-disp); font-size:clamp(20px,2.8vw,30px); font-weight:800; color:var(--white); letter-spacing:-0.02em; line-height:1.05; }
+
+/* H3 */
+h3 { font-family:var(--ff-disp); font-size:18px; font-weight:700; color:var(--white); letter-spacing:-0.01em; margin:36px 0 14px; display:flex; align-items:center; gap:10px; }
+h3 .h3-bar { display:block; width:22px; height:2px; background:var(--chapter-color, var(--acc)); flex-shrink:0; }
+
+/* ART BLOCK */
+.art-block { display:grid; grid-template-columns:72px 1fr; border:1px solid var(--border); margin:12px 0; overflow:hidden; background:var(--bg2); transition:border-color .25s; }
+.art-block:hover { border-color:var(--border2); }
+.art-id { background:var(--bg3); display:flex; flex-direction:column; align-items:center; justify-content:center; border-right:1px solid var(--border); padding:14px 6px; font-family:var(--ff-mono); font-size:10px; letter-spacing:.08em; color:var(--txt3); text-align:center; line-height:1.5; gap:3px; }
+.art-id strong { color:var(--acc-soft); font-size:15px; letter-spacing:0; font-weight:500; }
+.art-text { padding:14px 18px; font-family:var(--ff-body); font-size:16px; font-style:italic; color:var(--txt); line-height:1.7; }
+.art-text b { font-style:normal; color:var(--gold-soft); font-weight:600; }
+.art-text .kw { font-style:normal; color:var(--acc-soft); font-weight:600; }
+.art-text .exc { font-style:normal; color:var(--green); font-weight:600; }
+
+/* CALLOUT */
+.callout { border-left:3px solid; padding:15px 18px; margin:14px 0; position:relative; overflow:hidden; }
+.callout::before { content:''; position:absolute; inset:0; background:currentColor; opacity:.04; }
+.callout-head { font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; font-weight:500; margin-bottom:8px; }
+.callout p { font-family:var(--ff-body); font-size:16px; line-height:1.65; color:var(--txt); }
+.callout p + p { margin-top:8px; }
+.callout p strong { font-weight:600; }
+.c-red    { border-color:var(--acc);    color:var(--acc);    background:var(--acc-dim); }
+.c-gold   { border-color:var(--gold);   color:var(--gold);   background:var(--gold-dim); }
+.c-amber  { border-color:var(--amber);  color:var(--amber);  background:var(--amber-dim); }
+.c-blue   { border-color:var(--blue);   color:var(--blue);   background:var(--blue-dim); }
+.c-teal   { border-color:var(--teal);   color:var(--teal);   background:var(--teal-dim); }
+.c-purple { border-color:var(--purple); color:var(--purple); background:var(--purple-dim); }
+.c-green  { border-color:var(--green);  color:var(--green);  background:var(--green-dim); }
+.c-orange { border-color:var(--orange); color:var(--orange); background:var(--orange-dim); }
+
+/* PENA BADGE */
+.pena-badge {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--ff-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  padding:10px 18px; border:1px solid; border-radius:2px; margin:20px 0 8px;
+  position:relative; overflow:hidden;
+}
+.pena-badge::before { content:''; position:absolute; inset:0; background:currentColor; opacity:.06; }
+.pena-badge .pb-icon { font-size:16px; }
+.pena-1-4   { color:var(--acc);    border-color:var(--acc); }
+.pena-6m-2  { color:var(--amber);  border-color:var(--amber); }
+.pena-3m-1  { color:var(--orange); border-color:var(--orange); }
+
+/* CONDUTAS TABLE */
+.condutas-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
+.condutas-table th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.condutas-table th:first-child { color:var(--acc); }
+.condutas-table td { padding:12px 14px; border:1px solid var(--border); vertical-align:top; color:var(--txt); background:var(--bg2); font-family:var(--ff-body); line-height:1.6; }
+.condutas-table td:first-child { font-family:var(--ff-mono); font-size:12px; color:var(--acc-soft); background:var(--bg3); white-space:nowrap; font-weight:500; }
+.condutas-table tr:hover td { background:rgba(224,82,82,.03); }
+.condutas-table td b { color:var(--gold-soft); font-weight:600; }
+.condutas-table td .note { color:var(--teal); font-weight:600; font-style:normal; }
+.condutas-table td .exc  { color:var(--green); font-weight:600; }
+
+/* DATA TABLE */
+.data-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15.5px; }
+.data-table th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.data-table th:first-child { color:var(--gold); }
+.data-table td { padding:12px 14px; border:1px solid var(--border); vertical-align:top; color:var(--txt); background:var(--bg2); font-family:var(--ff-body); line-height:1.6; }
+.data-table td:first-child { font-family:var(--ff-mono); font-size:12px; color:var(--teal); background:var(--bg3); white-space:nowrap; }
+.data-table tr:hover td { background:rgba(255,255,255,.015); }
+.data-table td b { color:var(--gold-soft); font-weight:600; }
+.data-table td .bad  { color:var(--acc);   font-weight:600; }
+.data-table td .ok   { color:var(--green); font-weight:600; }
+.data-table td .warn { color:var(--amber); font-weight:600; }
+
+/* FLOW */
+.flow { margin:18px 0; border:1px solid var(--border); }
+.flow-row { display:flex; align-items:stretch; border-bottom:1px solid var(--border); transition:background .15s; }
+.flow-row:last-child { border-bottom:none; }
+.flow-row:hover { background:rgba(255,255,255,.02); }
+.flow-row.flow-header { background:#1E0A0A; border-bottom:1px solid rgba(224,82,82,.2); }
+.flow-row.flow-pass   { background:var(--green-dim); }
+.flow-row.flow-fail   { background:var(--acc-dim); }
+.flow-row.flow-note   { background:var(--purple-dim); }
+.flow-row.flow-exc    { background:var(--teal-dim); }
+.flow-index { width:52px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); }
+.flow-row.flow-header .flow-index { color:var(--acc); }
+.flow-row.flow-pass   .flow-index { color:var(--green); }
+.flow-row.flow-fail   .flow-index { color:var(--acc); }
+.flow-row.flow-note   .flow-index { color:var(--purple); }
+.flow-row.flow-exc    .flow-index { color:var(--teal); }
+.flow-body { padding:12px 18px; font-family:var(--ff-body); font-size:15.5px; color:var(--txt); line-height:1.55; flex:1; }
+.flow-row.flow-header .flow-body { font-family:var(--ff-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc); font-weight:500; }
+.flow-row.flow-pass .flow-body { color:var(--green); font-weight:600; }
+.flow-row.flow-fail .flow-body { color:var(--acc); font-weight:600; }
+.flow-row.flow-note .flow-body { color:var(--purple); }
+.flow-row.flow-exc  .flow-body { color:var(--teal); }
+.flow-body b { color:var(--gold-soft); font-weight:600; }
+.flow-tag { flex-shrink:0; display:flex; align-items:center; padding:0 14px; border-left:1px solid var(--border); font-family:var(--ff-mono); font-size:10px; letter-spacing:.1em; color:var(--txt3); white-space:nowrap; }
+
+/* SANÇÕES CARDS */
+.sancoes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin:18px 0; }
+.sancao-card { background:var(--bg2); border:1px solid var(--border); padding:24px 20px; position:relative; overflow:hidden; }
+.sancao-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--sc-color); }
+.sancao-card::after  { content:''; position:absolute; inset:0; background:var(--sc-color); opacity:.03; }
+.sc-penal  { --sc-color: var(--acc); }
+.sc-civil  { --sc-color: var(--gold); }
+.sc-adm    { --sc-color: var(--amber); }
+.sancao-label { font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--sc-color); margin-bottom:16px; }
+.sancao-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:12px; font-family:var(--ff-body); font-size:15px; color:var(--txt2); line-height:1.55; }
+.sancao-item::before { content:'›'; color:var(--sc-color); flex-shrink:0; margin-top:1px; font-size:16px; }
+.sancao-item b { color:var(--txt); font-weight:600; }
+.sancao-item .sub { display:block; font-size:13.5px; color:var(--txt3); margin-top:3px; font-style:italic; }
+
+/* ALERT BOXES */
+.alert-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:16px 0; }
+.alert-item { background:var(--bg2); border:1px solid var(--border); padding:18px 20px; border-left:3px solid var(--al-color); }
+.al-1 { --al-color: var(--acc); }
+.al-2 { --al-color: var(--amber); }
+.al-3 { --al-color: var(--teal); }
+.al-4 { --al-color: var(--purple); }
+.alert-num { font-family:var(--ff-mono); font-size:32px; font-weight:800; color:var(--al-color); opacity:.15; line-height:1; margin-bottom:6px; }
+.alert-title { font-family:var(--ff-disp); font-size:14px; font-weight:700; color:var(--white); margin-bottom:8px; }
+.alert-text { font-family:var(--ff-body); font-size:14.5px; color:var(--txt2); line-height:1.55; font-style:italic; }
+.alert-text strong { color:var(--al-color); font-style:normal; }
+
+/* DIVIDER */
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border2) 40%,var(--border2) 60%,transparent); margin:36px 0; }
+
+/* INLINE COLORS */
+.hl-red    { color:var(--acc-soft);  font-weight:600; }
+.hl-green  { color:var(--green);     font-weight:600; }
+.hl-amber  { color:var(--amber);     font-weight:600; }
+.hl-teal   { color:var(--teal);      font-weight:600; }
+.hl-purple { color:var(--purple);    font-weight:600; }
+.hl-orange { color:var(--orange);    font-weight:600; }
+.hl-gold   { color:var(--gold-soft); font-weight:600; }
+
+/* SYNTH TABLE */
+.synth { width:100%; border-collapse:collapse; margin:16px 0; font-size:15px; }
+.synth th { padding:9px 14px; text-align:left; font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em; text-transform:uppercase; background:var(--bg3); border:1px solid var(--border); color:var(--txt3); }
+.synth th:first-child { color:var(--acc); border-bottom:2px solid var(--acc); }
+.synth td { padding:11px 14px; border:1px solid var(--border); vertical-align:top; background:var(--bg2); font-family:var(--ff-body); }
+.synth td:first-child { color:var(--txt); font-size:15px; }
+.synth td:nth-child(2) { font-family:var(--ff-mono); font-size:11px; font-weight:500; white-space:nowrap; }
+.synth td:last-child { color:var(--txt2); font-style:italic; font-size:14px; }
+.synth tr:hover td { background:rgba(224,82,82,.02); }
+.s-1a4  { color:var(--acc)    !important; background:var(--acc-dim)    !important; }
+.s-6m2  { color:var(--amber)  !important; background:var(--amber-dim)  !important; }
+.s-3m1  { color:var(--orange) !important; background:var(--orange-dim) !important; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* RESPONSIVE */
+@media (max-width:1000px) {
+  .hero { grid-template-columns:1fr; min-height:auto; padding-top:110px; }
+  .hero-right { display:none; }
+  .main { grid-template-columns:1fr; }
+  .sidebar { display:none; }
+  .content { padding:40px 0; }
+  .sancoes-grid { grid-template-columns:1fr; }
+  .alert-grid { grid-template-columns:1fr; }
+}
+@media (max-width:700px) {
+  nav { padding:16px 20px; }
+  .nav-toc { display:none; }
+  .hero { padding:100px 20px 60px; }
+  .main { padding:0 20px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="cursor"      id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="legislacao_home.html" class="nav-back">Codex Legislativo</a>
+  <div class="nav-logo">Lei 13.869/19</div>
+  <ul class="nav-toc">
+    <li><a href="#geral">Disposições</a></li>
+    <li><a href="#sancoes">Sanções</a></li>
+    <li><a href="#condutas1">Pena 1–4 anos</a></li>
+    <li><a href="#condutas2">Pena 6m–2 anos</a></li>
+    <li><a href="#condutas3">Pena 3m–1 ano</a></li>
+    <li><a href="#sintese">Síntese</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Legislação Penal Especial</div>
+      <h1>Lei<br><span class="accent">13.869</span><br>de 2019</h1>
+      <p class="hero-subtitle">Define os crimes de abuso de autoridade praticados por agente público contra direitos e garantias fundamentais da pessoa. Revogou a Lei 4.898/65.</p>
+      <div class="hero-meta">
+        <span class="meta-chip active">Dolo Específico</span>
+        <span class="meta-chip active">Só Detenção</span>
+        <span class="meta-chip">3 Faixas de Pena</span>
+        <span class="meta-chip">AP Pública Incondicionada</span>
+        <span class="meta-chip">Lei 14.321/22</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="toc-card">
+        <div class="toc-label">Índice</div>
+        <ul class="toc-list">
+          <li class="toc-item"><a href="#geral">      <span class="toc-num">00</span> Disposições Gerais<span class="toc-badge badge-red">Fundamentos</span></a></li>
+          <li class="toc-item"><a href="#sancoes">    <span class="toc-num">01</span> Sanções &amp; Condenação<span class="toc-badge badge-gold">3 Esferas</span></a></li>
+          <li class="toc-item"><a href="#condutas1">  <span class="toc-num">02</span> Condutas — Pena 1 a 4 anos<span class="toc-badge badge-red">Arts. 9–36</span></a></li>
+          <li class="toc-item"><a href="#condutas2">  <span class="toc-num">03</span> Condutas — Pena 6m a 2 anos<span class="toc-badge badge-amber">Arts. 12–38</span></a></li>
+          <li class="toc-item"><a href="#condutas3">  <span class="toc-num">04</span> Violência Institucional<span class="toc-badge badge-orange">Art. 15-A</span></a></li>
+          <li class="toc-item"><a href="#sintese">    <span class="toc-num">★</span> Quadro-Síntese Final<span class="toc-badge badge-teal">Revisão</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-watermark">ABUSO</div>
+  </section>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navegação</div>
+        <ul class="sidebar-links" id="sidebarLinks">
+          <li><a href="#geral"      class="active"><span class="sidebar-dot"></span>Disposições Gerais</a></li>
+          <li><a href="#sancoes"           ><span class="sidebar-dot"></span>Sanções</a></li>
+          <li><a href="#condutas1"         ><span class="sidebar-dot"></span>Pena 1–4 anos</a></li>
+          <li><a href="#condutas2"         ><span class="sidebar-dot"></span>Pena 6m–2 anos</a></li>
+          <li><a href="#condutas3"         ><span class="sidebar-dot"></span>Violência Institucional</a></li>
+          <li><a href="#sintese"           ><span class="sidebar-dot"></span>Síntese</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Pontos Críticos</div>
+        <ul class="sidebar-links">
+          <li><a href="#dolo"><span class="sidebar-dot" style="background:var(--acc)"></span>Dolo específico</a></li>
+          <li><a href="#hermeneutica"><span class="sidebar-dot" style="background:var(--teal)"></span>Crime de hermenêutica</a></li>
+          <li><a href="#penas-regra"><span class="sidebar-dot" style="background:var(--amber)"></span>Só detenção</a></li>
+          <li><a href="#efeitos"><span class="sidebar-dot" style="background:var(--purple)"></span>Efeitos extrapenais</a></li>
+          <li><a href="#reincidencia"><span class="sidebar-dot" style="background:var(--amber)"></span>Reincidência</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="content">
+
+      <!-- ════════════════════════════════
+           00 — DISPOSIÇÕES GERAIS
+      ════════════════════════════════ -->
+      <div class="chapter" id="geral" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>00</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Fundamentos da Lei</div>
+            <div class="chapter-title">Disposições Gerais</div>
+          </div>
+        </div>
+
+        <!-- 3 cards conceituais -->
+        <div class="alert-grid reveal">
+          <div class="alert-item al-1" id="dolo">
+            <div class="alert-num">01</div>
+            <div class="alert-title">Crime Funcional</div>
+            <div class="alert-text">O abuso é caracterizado quando o agente está <strong>no exercício de suas funções</strong> ou <strong>a pretexto de exercê-las</strong>.</div>
+          </div>
+          <div class="alert-item al-3" id="hermeneutica">
+            <div class="alert-num">02</div>
+            <div class="alert-title">Crime de Hermenêutica</div>
+            <div class="alert-text"><strong>NÃO configura</strong> o abuso a <strong>divergência na interpretação</strong> de lei ou na avaliação de fatos e provas.</div>
+          </div>
+          <div class="alert-item al-2" style="grid-column:span 2">
+            <div class="alert-num">03</div>
+            <div class="alert-title">Dolo Específico — Elemento Subjetivo</div>
+            <div class="alert-text">O crime de abuso de autoridade somente se caracteriza quando o agente tem <strong>finalidade específica</strong> de: <strong>prejudicar outrem</strong> OU <strong>beneficiar a si mesmo ou a terceiro</strong> OU por <strong>mero capricho</strong> ou <strong>satisfação pessoal</strong>.</div>
+          </div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Sujeito Ativo do Crime</h3>
+        <div class="callout c-red reveal">
+          <div class="callout-head">Qualquer Agente Público</div>
+          <p>Todo aquele que exerce, ainda que <strong>transitoriamente</strong> ou <strong>sem remuneração</strong>, por <strong>eleição, nomeação, designação, contratação</strong> ou qualquer outra forma de investidura ou vínculo, mandato, cargo, emprego ou função.</p>
+        </div>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Abrangência do Sujeito Ativo</div></div>
+          <div class="flow-row"><div class="flow-index">①</div><div class="flow-body"><b>Servidor ou não</b> — prescinde do vínculo estatutário</div><div class="flow-tag">amplo</div></div>
+          <div class="flow-row"><div class="flow-index">②</div><div class="flow-body"><b>Adm. Direta, Indireta e Fundacional</b></div><div class="flow-tag">todos</div></div>
+          <div class="flow-row"><div class="flow-index">③</div><div class="flow-body"><b>Qualquer dos Poderes</b> — União, Estados, DF, Municípios e Territórios</div><div class="flow-tag">todos</div></div>
+        </div>
+
+        <h3 class="reveal"><span class="h3-bar"></span>Ação Penal</h3>
+        <table class="data-table reveal">
+          <thead><tr><th>Modalidade</th><th>Regra</th></tr></thead>
+          <tbody>
+            <tr><td>Regra</td><td><b>Ação Penal Pública INCONDICIONADA</b> — promovida pelo Ministério Público.</td></tr>
+            <tr><td>Exceção</td><td><b>Ação Penal Privada Subsidiária da Pública</b> — quando a pública não for intentada no prazo legal.</td></tr>
+            <tr><td>Decadência para AP Privada</td><td><b>6 meses</b>, contados do fim do prazo para oferecer denúncia. Trata-se de <b>decadência imprópria</b> — não ocorre extinção da punibilidade; o MP ainda pode ingressar com a AP observando o prazo prescricional.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout c-teal reveal">
+          <div class="callout-head">Papel do MP na Ação Privada Subsidiária</div>
+          <p>Aditar a queixa, repudiá-la e oferecer <strong>denúncia substitutiva</strong> · Intervir em todos os termos do processo · Fornecer elementos de prova · Interpor recurso · <strong>Retomar a ação como parte principal</strong> a todo tempo, caso haja negligência do querelante.</p>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════
+           01 — SANÇÕES
+      ════════════════════════════════ -->
+      <div class="chapter" id="sancoes" style="--chapter-color:var(--gold)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>01</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Esferas de Responsabilidade</div>
+            <div class="chapter-title">Sanções &amp; Condenação</div>
+          </div>
+        </div>
+
+        <div class="sancoes-grid reveal">
+          <!-- Penal -->
+          <div class="sancao-card sc-penal">
+            <div class="sancao-label">⚖ Penal</div>
+            <div class="sancao-item"><b>Penas privativas de liberdade</b><span class="sub">Apenas <span style="color:var(--acc);font-style:normal">DETENÇÃO</span> — sem reclusão na lei toda</span></div>
+            <div class="sancao-item"><b>Restritivas de Direitos</b> (autônoma ou cumulativamente)<span class="sub">① Prestação de serviço<br>② Suspensão do exercício do cargo/função/mandato por <span style="color:var(--acc);font-style:normal">1–6 meses</span>, com perda dos vencimentos</span></div>
+          </div>
+          <!-- Civil -->
+          <div class="sancao-card sc-civil" id="efeitos">
+            <div class="sancao-label">🏛 Efeitos da Condenação</div>
+            <div class="sancao-item"><b>Obrigação de INDENIZAR</b><span class="sub">Juiz fixa valor mínimo na sentença, a requerimento do ofendido</span></div>
+            <div class="sancao-item"><b>INABILITAÇÃO</b> para o exercício de cargo, mandato ou função pública<span class="sub">Prazo: <span style="color:var(--amber);font-style:normal">1 a 5 anos</span></span></div>
+            <div class="sancao-item"><b>PERDA</b> do cargo, do mandato ou da função pública</div>
+          </div>
+          <!-- Adm -->
+          <div class="sancao-card sc-adm">
+            <div class="sancao-label">📋 Administrativo</div>
+            <div class="sancao-item">As sanções civis, penais e administrativas <b>PODERÃO CUMULAR-SE</b>, sendo <b>INDEPENDENTES ENTRE SI</b>.</div>
+            <div class="sancao-item">A sentença penal que reconhece <b>excludente de ilicitude</b> faz coisa julgada em âmbito civil e adm-disciplinar.</div>
+          </div>
+        </div>
+
+        <div id="reincidencia"></div>
+        <div class="alert-grid reveal">
+          <div class="alert-item al-2">
+            <div class="alert-num">!</div>
+            <div class="alert-title">Efeito vs. Pena</div>
+            <div class="alert-text">Não confunda <strong>efeito da condenação</strong> (efeito extrapenal) com pena. A perda do cargo, por exemplo, <strong>NÃO é uma pena</strong> — é <strong>EFEITO EXTRAPENAL</strong>.</div>
+          </div>
+          <div class="alert-item al-4">
+            <div class="alert-num">!</div>
+            <div class="alert-title">Reincidência — Não Automático</div>
+            <div class="alert-text">Inabilitação e perda do cargo são <strong>condicionados à REINCIDÊNCIA</strong> em crime de abuso de autoridade e <strong>NÃO são automáticos</strong>, devendo ser declarados <strong>motivadamente</strong> na sentença.</div>
+          </div>
+          <div class="alert-item al-3" style="grid-column:span 2">
+            <div class="alert-num">!</div>
+            <div class="alert-title">Absolvição / Condenação Criminal &amp; Demais Esferas</div>
+            <div class="alert-text">Absolvição ou condenação criminal <strong>negando ou confirmando a AUTORIA ou EXISTÊNCIA DO FATO</strong> não podem ser questionadas no âmbito civil ou administrativo. <strong>Pegadinha clássica:</strong> afirmar que ausência de prova na esfera penal interfere nas demais esferas é <strong>FALSO</strong>.</div>
+          </div>
+        </div>
+
+        <h3 class="reveal" id="penas-regra"><span class="h3-bar"></span>Regras Gerais das Condutas</h3>
+        <div class="flow reveal">
+          <div class="flow-row flow-header"><div class="flow-index">—</div><div class="flow-body">Regras Comuns a Todos os Tipos Penais</div></div>
+          <div class="flow-row flow-fail"><div class="flow-index">✗</div><div class="flow-body">Não há crime com pena de <b>RECLUSÃO</b> — apenas DETENÇÃO (portanto, não há regime fechado)</div></div>
+          <div class="flow-row flow-fail"><div class="flow-index">✗</div><div class="flow-body">Não há hipóteses de <b>AUMENTO DE PENA</b> (qualificado)</div></div>
+          <div class="flow-row flow-fail"><div class="flow-index">✗</div><div class="flow-body">Não há <b>DELAÇÃO PREMIADA</b></div></div>
+          <div class="flow-row flow-pass"><div class="flow-index">✓</div><div class="flow-body">Penas de <b>1–4 anos</b> ou <b>6m–2 anos</b> → possível <b>transação penal</b> (Lei 9.099)</div></div>
+          <div class="flow-row flow-note"><div class="flow-index">↑</div><div class="flow-body">Penas privativas de liberdade são <b>substituíveis</b> por restritivas de direitos</div></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════
+           02 — CONDUTAS 1 A 4 ANOS
+      ════════════════════════════════ -->
+      <div class="chapter" id="condutas1" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>02</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Tipos Penais Mais Graves</div>
+            <div class="chapter-title">Condutas com Pena de 1 a 4 Anos e Multa</div>
+          </div>
+        </div>
+
+        <div class="pena-badge pena-1-4 reveal"><span class="pb-icon">⚠</span> DETENÇÃO · 1 a 4 ANOS + MULTA</div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>9</strong>art.</div>
+          <div class="art-text">Decretar medida de <kw class="kw">privação da liberdade</kw> em manifesta desconformidade com as hipóteses legais.
+          <b>§ único.</b> Incorre na mesma pena a autoridade judiciária que, dentro de prazo razoável, deixar de:
+          I – <b>relaxar a prisão</b> manifestamente ilegal; II – <b>substituir a preventiva</b> por cautelar diversa ou conceder liberdade provisória, quando manifestamente cabível; III – <b>deferir liminar ou habeas corpus</b>, quando manifestamente cabível.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>10</strong>art.</div>
+          <div class="art-text">Decretar a <kw class="kw">condução coercitiva</kw> de testemunha ou investigado <b>manifestamente descabida</b> ou <b>sem prévia intimação</b> de comparecimento ao juízo.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>13</strong>art.</div>
+          <div class="art-text">Constranger o <kw class="kw">preso ou detento</kw>, mediante <b>violência, grave ameaça</b> ou redução de sua capacidade de resistência, a:
+          I – <b>exibir-se</b> ou ter seu corpo exibido à curiosidade pública; II – submeter-se a <b>situação vexatória</b> ou constrangimento não autorizado em lei; III – <b>produzir prova contra si mesmo</b> ou contra terceiro.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>15</strong>art.</div>
+          <div class="art-text">Constranger a depor, sob <kw class="kw">ameaça de prisão</kw>, pessoa que, em razão de função, ministério, ofício ou profissão, deva <b>guardar segredo ou resguardar sigilo</b>.
+          <b>§ único.</b> Incorre na mesma pena quem prossegue com o interrogatório: I – de pessoa que tenha decidido exercer o <b>direito ao silêncio</b>; II – de pessoa que tenha optado por ser assistida por <b>advogado ou defensor público</b>, sem a presença de seu patrono.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>19</strong>art.</div>
+          <div class="art-text">Impedir ou retardar, injustificadamente, o <kw class="kw">envio de pleito de preso</kw> à autoridade judiciária competente para a apreciação da legalidade de sua prisão ou das circunstâncias de sua custódia.
+          <b>§ único.</b> Incorre na mesma pena o <b>magistrado</b> que, ciente do impedimento ou da demora, deixa de tomar as providências tendentes a saná-lo ou, não sendo competente, deixa de enviar o pedido à autoridade judiciária que o seja.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>21</strong>art.</div>
+          <div class="art-text">Manter <kw class="kw">presos de ambos os sexos</kw> na mesma cela ou espaço de confinamento.
+          <b>§ único.</b> Incorre na mesma pena quem mantém, na mesma cela, <b>criança ou adolescente</b> na companhia de maior de idade ou em ambiente inadequado, observado o ECA.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>22</strong>art.</div>
+          <div class="art-text">Invadir ou adentrar, <kw class="kw">clandestina ou astuciosamente</kw>, ou à revelia da vontade do ocupante, imóvel alheio ou suas dependências, sem determinação judicial ou fora das condições legais.
+          <b>§ 1º I</b> – coage alguém mediante violência ou grave ameaça a franquear acesso ao imóvel; <b>§ 1º III</b> – cumpre <b>mandado de busca e apreensão</b> após as <b>21h</b> ou antes das <b>5h</b>.
+          <b class="exc">§ 2º Exclusão:</b> <span class="exc">não há crime se o ingresso for para prestar socorro ou quando houver fundados indícios de flagrante delito ou desastre.</span></div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>23</strong>art.</div>
+          <div class="art-text">Inovar artificiosamente, no curso de <kw class="kw">diligência, investigação ou processo</kw>, o estado de lugar, de coisa ou de pessoa, com o fim de eximir-se de responsabilidade ou responsabilizar criminalmente alguém.
+          <b>§ único I</b> – eximir-se de responsabilidade civil ou administrativa por excesso praticado no curso de diligência; <b>§ único II</b> – omitir dados ou <b>divulgar dados incompletos</b> para desviar o curso da investigação.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>24</strong>art.</div>
+          <div class="art-text">Constranger, sob violência ou grave ameaça, funcionário ou empregado de <kw class="kw">instituição hospitalar</kw> pública ou privada a admitir para tratamento pessoa cujo <b>óbito já tenha ocorrido</b>, com o fim de alterar local ou momento de crime. <b>Aplica-se também a pena correspondente à violência.</b></div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>25</strong>art.</div>
+          <div class="art-text">Proceder à obtenção de prova, em procedimento de investigação ou fiscalização, por <kw class="kw">meio manifestamente ilícito</kw>.
+          <b>§ único.</b> Incorre na mesma pena quem <b>faz uso de prova</b>, em desfavor do investigado ou fiscalizado, com <b>prévio conhecimento de sua ilicitude</b>.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>28</strong>art.</div>
+          <div class="art-text">Divulgar <kw class="kw">gravação ou trecho de gravação</kw> sem relação com a prova que se pretenda produzir, expondo a intimidade ou a vida privada ou ferindo a honra ou a imagem do investigado ou acusado.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>30</strong>art.</div>
+          <div class="art-text">Dar início ou proceder à <kw class="kw">persecução penal, civil ou administrativa</kw> sem justa causa fundamentada ou contra quem <b>sabe inocente</b>.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>36</strong>art.</div>
+          <div class="art-text">Decretar, em processo judicial, a <kw class="kw">indisponibilidade de ativos financeiros</kw> em quantia que extrapole exacerbadamente o valor estimado para a satisfação da dívida e, ante a demonstração da excessividade, <b>deixar de corrigi-la</b>.</div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════
+           03 — CONDUTAS 6M A 2 ANOS
+      ════════════════════════════════ -->
+      <div class="chapter" id="condutas2" style="--chapter-color:var(--amber)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>03</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Tipos Penais de Menor Potencial Ofensivo</div>
+            <div class="chapter-title">Condutas com Pena de 6 Meses a 2 Anos e Multa</div>
+          </div>
+        </div>
+
+        <div class="pena-badge pena-6m-2 reveal"><span class="pb-icon">▲</span> DETENÇÃO · 6 MESES a 2 ANOS + MULTA</div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>12</strong>art.</div>
+          <div class="art-text">Deixar injustificadamente de <kw class="kw">comunicar prisão em flagrante</kw> à autoridade judiciária no prazo legal.
+          <b>§ único I</b> – deixa de comunicar imediatamente a execução de <b>prisão temporária ou preventiva</b> à autoridade judiciária que a decretou; <b>§ único II</b> – deixa de comunicar a prisão e o local à <b>família</b>; <b>§ único III</b> – deixa de entregar ao preso, no prazo de <b>24 horas</b>, a <b>nota de culpa</b>; <b>§ único IV</b> – <b>prolonga a execução</b> de pena, deixando de executar alvará de soltura imediatamente após recebido.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>16</strong>art.</div>
+          <div class="art-text">Deixar de <kw class="kw">identificar-se</kw> ou identificar-se falsamente ao preso por ocasião de sua captura ou durante sua detenção ou prisão.
+          <b>§ único.</b> Incorre na mesma pena quem, como responsável por interrogatório, <b>deixa de identificar-se</b> ao preso ou atribui a si mesmo <b>falsa identidade, cargo ou função</b>.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>18</strong>art.</div>
+          <div class="art-text">Submeter o preso a <kw class="kw">interrogatório policial durante o período de repouso noturno</kw>, salvo se capturado em <span class="exc">flagrante delito</span> ou se ele, <span class="exc">devidamente assistido, consentir</span> em prestar declarações.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>20</strong>art.</div>
+          <div class="art-text">Impedir, sem justa causa, a <kw class="kw">entrevista pessoal e reservada</kw> do preso com seu advogado.
+          <b>§ único.</b> Incorre na mesma pena quem impede o preso, réu solto ou investigado de entrevistar-se pessoal e reservadamente com <b>advogado ou defensor, por prazo razoável, antes de audiência judicial</b>, e de sentar-se ao seu lado durante a audiência.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>27</strong>art.</div>
+          <div class="art-text">Requisitar instauração ou instaurar <kw class="kw">procedimento investigatório</kw> de infração penal ou administrativa, em desfavor de alguém, à <b>falta de qualquer indício</b> da prática de crime, de ilícito funcional ou de infração administrativa.
+          <b class="exc">§ único:</b> <span class="exc">Não há crime quando se tratar de sindicância ou investigação preliminar sumária, devidamente justificada.</span></div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>29</strong>art.</div>
+          <div class="art-text">Prestar <kw class="kw">informação falsa</kw> sobre procedimento judicial, policial, fiscal ou administrativo com o fim de <b>prejudicar interesse de investigado</b>.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>31</strong>art.</div>
+          <div class="art-text">Estender injustificadamente a <kw class="kw">investigação, procrastinando-a</kw> em prejuízo do investigado ou fiscalizado.
+          <b>§ único.</b> Incorre na mesma pena quem, inexistindo prazo para execução ou conclusão de procedimento, o estende de forma imotivada.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>32</strong>art.</div>
+          <div class="art-text">Negar ao interessado, seu defensor ou advogado <kw class="kw">acesso aos autos</kw> de investigação preliminar, ao termo circunstanciado, ao inquérito ou a qualquer outro procedimento investigatório, assim como impedir a obtenção de cópias.
+          <b>Ressalvado:</b> acesso a peças relativas a diligências em curso ou futuras, cujo sigilo seja imprescindível.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>33</strong>art.</div>
+          <div class="art-text">Exigir informação ou cumprimento de obrigação <kw class="kw">sem expresso amparo legal</kw>.
+          <b>§ único.</b> Incorre na mesma pena quem se utiliza de cargo ou função pública ou invoca a condição de agente público para <b>se eximir de obrigação legal</b> ou para <b>obter vantagem ou privilégio indevido</b>.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>37</strong>art.</div>
+          <div class="art-text">Demorar demasiada e injustificadamente no <kw class="kw">exame de processo</kw> de que tenha requerido vista em órgão colegiado, com o intuito de <b>procrastinar</b> seu andamento ou retardar o julgamento.</div>
+        </div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>38</strong>art.</div>
+          <div class="art-text">Antecipar, por meio de comunicação — inclusive <kw class="kw">rede social</kw> — a <b>atribuição de culpa</b>, antes de concluídas as apurações e formalizada a acusação.</div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════
+           04 — VIOLÊNCIA INSTITUCIONAL
+      ════════════════════════════════ -->
+      <div class="chapter" id="condutas3" style="--chapter-color:var(--orange)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>04</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Incluído pela Lei 14.321/22</div>
+            <div class="chapter-title">Violência Institucional — Art. 15-A</div>
+          </div>
+        </div>
+
+        <div class="pena-badge pena-3m-1 reveal"><span class="pb-icon">▼</span> DETENÇÃO · 3 MESES a 1 ANO + MULTA</div>
+
+        <div class="art-block reveal">
+          <div class="art-id"><strong>15-A</strong>art.</div>
+          <div class="art-text">Submeter a <kw class="kw">vítima de infração penal</kw> ou a <kw class="kw">testemunha de crimes violentos</kw> a procedimentos <b>desnecessários, repetitivos ou invasivos</b>, que a leve a reviver, sem estrita necessidade:
+          I – a situação de <b>violência</b>; ou II – outras situações <b>potencialmente geradoras de sofrimento ou estigmatização</b>.</div>
+        </div>
+
+        <div class="callout c-orange reveal">
+          <div class="callout-head">Causas de Aumento de Pena — Revitimização</div>
+          <p><strong>Aumento de 2/3:</strong> agente público <strong>PERMITIR</strong> que terceiro intimide a vítima de crimes violentos, gerando indevida revitimização.</p>
+          <p><strong>Aumento EM DOBRO:</strong> agente público <strong>INTIMIDAR</strong> (diretamente) a vítima de crimes violentos, gerando indevida revitimização.</p>
+        </div>
+
+        <table class="data-table reveal">
+          <thead><tr><th>Conduta</th><th>Pena base</th><th>Aumento</th></tr></thead>
+          <tbody>
+            <tr><td>Revitimização por procedimentos desnecessários</td><td>Detenção 3m–1 ano + multa</td><td>—</td></tr>
+            <tr><td>Permitir que terceiro intimide a vítima</td><td>Detenção 3m–1 ano + multa</td><td class="warn">+ 2/3</td></tr>
+            <tr><td>Intimidar diretamente a vítima</td><td>Detenção 3m–1 ano + multa</td><td class="bad">Em dobro</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ════════════════════════════════
+           SÍNTESE FINAL
+      ════════════════════════════════ -->
+      <div class="chapter" id="sintese" style="--chapter-color:var(--acc)">
+        <div class="chapter-head reveal">
+          <div class="chapter-num-block"><span>★</span></div>
+          <div class="chapter-title-wrap">
+            <div class="chapter-eyebrow">Revisão Completa</div>
+            <div class="chapter-title">Quadro-Síntese por Pena</div>
+          </div>
+        </div>
+
+        <table class="synth reveal">
+          <thead><tr><th>Artigo &amp; Conduta</th><th>Pena</th><th>Ponto de Atenção</th></tr></thead>
+          <tbody>
+            <tr><td>Art. 9 — Decretar privação de liberdade em desconformidade</td><td class="s-1a4">1–4 anos</td><td>§ único: juiz que deixa de relaxar prisão, substituir preventiva ou deferir HC.</td></tr>
+            <tr><td>Art. 10 — Condução coercitiva descabida ou sem intimação</td><td class="s-1a4">1–4 anos</td><td>Exige manifestamente descabida OU sem prévia intimação.</td></tr>
+            <tr><td>Art. 12 — Omitir comunicação de prisão em flagrante</td><td class="s-6m2">6m–2 anos</td><td>§IV: prolonga execução de pena sem executar alvará de soltura.</td></tr>
+            <tr><td>Art. 13 — Constranger preso/detento à exibição ou prova</td><td class="s-1a4">1–4 anos</td><td>Violência, grave ameaça ou redução da capacidade de resistência.</td></tr>
+            <tr><td>Art. 15 — Constranger a depor quem tem sigilo profissional</td><td class="s-1a4">1–4 anos</td><td>§ único: prosseguir interrogatório de quem exerceu direito ao silêncio.</td></tr>
+            <tr><td>Art. 15-A — Revitimização (Violência Institucional)</td><td class="s-3m1">3m–1 ano</td><td>+ 2/3 se permitir terceiro intimidar; em dobro se intimidar diretamente.</td></tr>
+            <tr><td>Art. 16 — Não se identificar ou identificar-se falsamente ao preso</td><td class="s-6m2">6m–2 anos</td><td>Também vale para responsável por interrogatório.</td></tr>
+            <tr><td>Art. 18 — Interrogatório durante repouso noturno</td><td class="s-6m2">6m–2 anos</td><td>Exceções: flagrante ou consentimento assistido.</td></tr>
+            <tr><td>Art. 19 — Impedir envio de pleito de preso ao juízo</td><td class="s-1a4">1–4 anos</td><td>§ único: magistrado que, ciente da demora, não a sanar.</td></tr>
+            <tr><td>Art. 20 — Impedir entrevista reservada com advogado</td><td class="s-6m2">6m–2 anos</td><td>Também antes de audiência e durante ela (salvo interrogatório).</td></tr>
+            <tr><td>Art. 21 — Manter presos de ambos os sexos na mesma cela</td><td class="s-1a4">1–4 anos</td><td>§ único: criança/adolescente com maior de idade ou ambiente inadequado.</td></tr>
+            <tr><td>Art. 22 — Invasão de domicílio</td><td class="s-1a4">1–4 anos</td><td>§ 1º III: busca após 21h ou antes das 5h. § 2º: exclusão em socorro/flagrante.</td></tr>
+            <tr><td>Art. 23 — Inovar artificiosamente o estado de lugar/coisa/pessoa</td><td class="s-1a4">1–4 anos</td><td>§ único II: omitir ou divulgar dados incompletos para desviar investigação.</td></tr>
+            <tr><td>Art. 24 — Constranger hospital a admitir óbito</td><td class="s-1a4">1–4 anos</td><td>Cumulação com pena da violência empregada.</td></tr>
+            <tr><td>Art. 25 — Obtenção de prova por meio ilícito</td><td class="s-1a4">1–4 anos</td><td>§ único: também quem usa a prova com prévio conhecimento de ilicitude.</td></tr>
+            <tr><td>Art. 27 — Instaurar investigação sem qualquer indício</td><td class="s-6m2">6m–2 anos</td><td>Excludente: sindicância ou investigação preliminar justificada.</td></tr>
+            <tr><td>Art. 28 — Divulgar gravação sem relação com a prova</td><td class="s-1a4">1–4 anos</td><td>Expõe intimidade ou fere honra/imagem do investigado.</td></tr>
+            <tr><td>Art. 29 — Prestar informação falsa sobre procedimento</td><td class="s-6m2">6m–2 anos</td><td>Finalidade: prejudicar interesse de investigado.</td></tr>
+            <tr><td>Art. 30 — Persecução sem justa causa ou contra inocente</td><td class="s-1a4">1–4 anos</td><td>Contra quem sabe inocente — dolo específico reforçado.</td></tr>
+            <tr><td>Art. 31 — Procrastinar investigação injustificadamente</td><td class="s-6m2">6m–2 anos</td><td>Em prejuízo do investigado; também quando não há prazo fixado.</td></tr>
+            <tr><td>Art. 32 — Negar acesso aos autos</td><td class="s-6m2">6m–2 anos</td><td>Ressalva: peças de diligências em curso ou futuras com sigilo imprescindível.</td></tr>
+            <tr><td>Art. 33 — Exigir obrigação sem amparo legal</td><td class="s-6m2">6m–2 anos</td><td>§ único: usar o cargo para se eximir de obrigação ou obter vantagem indevida.</td></tr>
+            <tr><td>Art. 36 — Indisponibilidade de ativos exacerbada</td><td class="s-1a4">1–4 anos</td><td>E não corrigir após demonstração da excessividade.</td></tr>
+            <tr><td>Art. 37 — Demorar no exame de processo em órgão colegiado</td><td class="s-6m2">6m–2 anos</td><td>Intuito de procrastinar ou retardar julgamento.</td></tr>
+            <tr><td>Art. 38 — Antecipar atribuição de culpa (inclusive redes sociais)</td><td class="s-6m2">6m–2 anos</td><td>Antes de concluídas as apurações e formalizada a acusação.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- RODAPÉ DA PÁGINA -->
+      <div style="margin-top:60px;padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;" class="reveal">
+        <div style="font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3)">Lei 13.869/19 · Codex Legislativo · 2026</div>
+        <a href="legislacao_home.html" style="font-family:var(--ff-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);text-decoration:none;display:flex;align-items:center;gap:8px;transition:opacity .2s" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">← Voltar ao Codex</a>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /page -->
+
+<script>
+// CURSOR
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.art-block,.callout,.sancao-card,.alert-item,td,th').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='50px';ring.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px';});
+});
+
+// PROGRESS
+const pb=document.getElementById('progress');
+document.addEventListener('scroll',()=>{pb.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
+
+// REVEAL
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.transitionDelay=(i%5)*.07+'s';e.target.classList.add('visible');}});
+},{threshold:.08});
+reveals.forEach(el=>io.observe(el));
+
+// SIDEBAR ACTIVE
+const sections=document.querySelectorAll('.chapter');
+const sideLinks=document.querySelectorAll('#sidebarLinks a');
+document.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  sideLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+});
+</script>
+</body>
+</html>
